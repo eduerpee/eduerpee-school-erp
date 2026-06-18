@@ -1,0 +1,12 @@
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/transport.controller');
+const { authenticate } = require('../middleware/auth.middleware');
+router.use(authenticate);
+router.get('/routes',      ctrl.getRoutes);
+router.post('/routes',     ctrl.createRoute);
+router.put('/routes/:id',  ctrl.updateRoute);
+router.get('/vehicles',    ctrl.getVehicles);
+router.post('/vehicles',   ctrl.createVehicle);
+router.put('/vehicles/:id',ctrl.updateVehicle);
+module.exports = router;

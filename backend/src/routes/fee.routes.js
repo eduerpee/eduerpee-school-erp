@@ -1,0 +1,17 @@
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/fee.controller');
+const { authenticate } = require('../middleware/auth.middleware');
+router.use(authenticate);
+router.get('/types',           ctrl.getFeeTypes);
+router.post('/types',          ctrl.createFeeType);
+router.put('/types/:id',       ctrl.updateFeeType);
+router.delete('/types/:id',    ctrl.deleteFeeType);
+router.get('/structure',       ctrl.getFeeStructure);
+router.post('/structure',      ctrl.saveFeeStructure);
+router.delete('/structure/:id',ctrl.deleteFeeStructure);
+router.get('/student/:studentId', ctrl.getStudentFees);
+router.post('/collect',        ctrl.collectFee);
+router.get('/collection-report', ctrl.getCollectionReport);
+router.get('/pending',         ctrl.getPendingFees);
+module.exports = router;

@@ -1,0 +1,10 @@
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/tc.controller');
+const { authenticate } = require('../middleware/auth.middleware');
+router.use(authenticate);
+router.get('/',      ctrl.getTCs);
+router.post('/',     ctrl.createTC);
+router.put('/:id',   ctrl.updateTC);
+router.delete('/:id',ctrl.deleteTC);
+module.exports = router;

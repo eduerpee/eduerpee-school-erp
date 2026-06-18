@@ -1,0 +1,10 @@
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/employee.controller');
+const { authenticate } = require('../middleware/auth.middleware');
+router.use(authenticate);
+router.get('/',     ctrl.getEmployees);
+router.get('/:id',  ctrl.getEmployee);
+router.post('/',    ctrl.createEmployee);
+router.put('/:id',  ctrl.updateEmployee);
+module.exports = router;

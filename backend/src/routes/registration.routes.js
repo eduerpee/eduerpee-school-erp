@@ -1,0 +1,10 @@
+const express = require('express');
+const router  = express.Router();
+const { getRegistrations, createRegistration, updateRegistration, convertToStudent } = require('../controllers/registration.controller');
+const { authenticate } = require('../middleware/auth.middleware');
+router.use(authenticate);
+router.get('/',             getRegistrations);
+router.post('/',            createRegistration);
+router.put('/:id',          updateRegistration);
+router.post('/:id/convert', convertToStudent);
+module.exports = router;

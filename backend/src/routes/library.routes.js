@@ -1,0 +1,12 @@
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/library.controller');
+const { authenticate } = require('../middleware/auth.middleware');
+router.use(authenticate);
+router.get('/books',        ctrl.getBooks);
+router.post('/books',       ctrl.addBook);
+router.get('/issues',       ctrl.getIssues);
+router.post('/issue',       ctrl.issueBook);
+router.put('/return/:id',   ctrl.returnBook);
+router.get('/categories',   ctrl.getCategories);
+module.exports = router;

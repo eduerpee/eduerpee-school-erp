@@ -1,0 +1,14 @@
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/student.controller');
+const { authenticate } = require('../middleware/auth.middleware');
+router.use(authenticate);
+router.get('/',                     ctrl.getStudents);
+router.get('/:id',                  ctrl.getStudent);
+router.post('/',                    ctrl.createStudent);
+router.put('/:id',                  ctrl.updateStudent);
+router.delete('/:id',               ctrl.deleteStudent);
+router.post('/:id/promote',         ctrl.promoteStudent);
+router.post('/:id/transport',       ctrl.assignTransportRoute);
+router.post('/:id/confirm-admission', ctrl.confirmAdmission);
+module.exports = router;

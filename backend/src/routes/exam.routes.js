@@ -1,0 +1,13 @@
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/exam.controller');
+const { authenticate } = require('../middleware/auth.middleware');
+router.use(authenticate);
+router.get('/',            ctrl.getExams);
+router.post('/',           ctrl.createExam);
+router.get('/schedules',   ctrl.getSchedules);
+router.post('/schedules',  ctrl.addSchedule);
+router.get('/students',    ctrl.getStudentsForClass);
+router.post('/marks',      ctrl.saveMarks);
+router.get('/results',     ctrl.getResults);
+module.exports = router;

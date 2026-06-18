@@ -1,0 +1,12 @@
+const express = require('express');
+const router  = express.Router();
+const ctrl    = require('../controllers/room.controller');
+const { authenticate } = require('../middleware/auth.middleware');
+router.use(authenticate);
+router.get('/',              ctrl.getRooms);
+router.post('/',             ctrl.createRoom);
+router.put('/:id',           ctrl.updateRoom);
+router.delete('/:id',        ctrl.deleteRoom);
+router.post('/:id/allocate', ctrl.allocateRoom);
+router.delete('/:id/allocate', ctrl.deallocateRoom);
+module.exports = router;
