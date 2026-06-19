@@ -1,4 +1,5 @@
 import React from 'react';
+import { useResponsive } from '../utils/responsive';
 import { useQuery } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +8,8 @@ import { dashboardAPI } from '../services/api';
 export default function Dashboard() {
   const user     = useSelector(s => s.auth.user);
   const navigate = useNavigate();
+  const { isMobile, isTablet } = useResponsive();
+  const cols = isMobile ? 1 : isTablet ? 2 : 4;
 
   const { data: apiData, isError, isLoading } = useQuery({
     queryKey: ['dashboard'],
@@ -61,7 +64,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stat Cards Row 1 */}
-      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:14,marginBottom:14}}>
+      <div style={{display:'grid',gridTemplateColumns:`repeat(${cols},1fr)`,gap:14,marginBottom:14}}>
         {CARDS.map(c=>(
           <div key={c.label} onClick={()=>navigate(c.path)}
             style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:18,cursor:'pointer',transition:'all .18s'}}
@@ -75,7 +78,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stat Cards Row 2 */}
-      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:14,marginBottom:20}}>
+      <div style={{display:'grid',gridTemplateColumns:`repeat(${cols},1fr)`,gap:14,marginBottom:20}}>
         {[
           { label:'New Admissions',  value: fmt(recentAdmissions.length),                    icon:'📋', sub: recentAdmissions.length>0?'Last 30 days':'No recent', c:'#1E1B4B' },
           { label:'Open Enquiries',  value: fmt(stats.open_enquiries),                        icon:'📞', sub:'Awaiting followup',                                  c:'#0891B2' },
@@ -180,7 +183,7 @@ export default function Dashboard() {
           <div style={{padding:'12px 16px',borderBottom:'0.5px solid #F3F4F6'}}>
             <span style={{fontSize:13,fontWeight:700}}>⚡ Quick Actions</span>
           </div>
-          <div style={{padding:16,display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:10}}>
+          <div style={{padding:16,display:'grid',gridTemplateColumns:`repeat(${cols},1fr)`,gap:10}}>
             {[['📋','New Admission','/students'],['💰','Collect Fee','/fees'],['✅','Attendance','/attendance'],['📢','Notice','/notices'],
               ['👤','Add Staff','/employees'],['📊','Reports','/reports'],['🚌','Transport','/transport'],['📚','Library','/library']].map(([icon,label,path])=>(
               <div key={label} onClick={()=>navigate(path)}
