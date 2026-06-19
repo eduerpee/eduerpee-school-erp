@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
 import { schoolAPI } from '../../services/api';
 import { useResponsive } from '../../utils/responsive';
+import LoadingBar from '../LoadingBar';
 import toast from 'react-hot-toast';
 
 const Icons = {
@@ -74,6 +75,7 @@ export default function Layout() {
   const location   = useLocation();
   const user       = useSelector(s => s.auth.user);
   const { isMobile, isTablet } = useResponsive();
+  const [loadKey, setLoadKey] = React.useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed,   setCollapsed]   = useState(false);
   const [settings,    setSettings]    = useState(() => {
@@ -81,7 +83,10 @@ export default function Layout() {
   });
 
   // Close sidebar on route change (mobile)
-  useEffect(() => { if (isMobile) setSidebarOpen(false); }, [location.pathname, isMobile]);
+  useEffect(() => {
+    if (isMobile) setSidebarOpen(false);
+    setLoadKey(k => k + 1); // trigger loading bar
+  }, [location.pathname, isMobile]);
 
   // Auto collapse on tablet
   useEffect(() => { if (isTablet) setCollapsed(true); else if (!isMobile) setCollapsed(false); }, [isTablet, isMobile]);
@@ -319,6 +324,9 @@ export default function Layout() {
             )}
           </div>
         </header>
+
+        {/* Loading bar on route change */}
+        <LoadingBar key={loadKey}/>
 
         {/* Page content */}
         <div style={{ flex:1, overflowY:'auto', padding: isMobile ? '12px' : '20px', background:'#F1F5F9' }}>
