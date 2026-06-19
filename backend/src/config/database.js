@@ -4,12 +4,13 @@ const { logger } = require('../utils/logger');
 // Support both DATABASE_URL (Supabase/Neon/Railway) and individual env vars
 const poolConfig = process.env.DATABASE_URL
   ? {
-      connectionString: process.env.DATABASE_URL,
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      },
-      family: 4,  // Force IPv4
+      host: 'db.fttmxszfkvynhprcfzyr.supabase.co',
+      port: 5432,
+      database: 'postgres',
+      user: 'postgres',
+      password: process.env.DB_PASSWORD,
+      ssl: { require: true, rejectUnauthorized: false },
+      family: 4,
       max: 20,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 5000,
