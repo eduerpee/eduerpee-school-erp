@@ -5,133 +5,184 @@ export default function LoadingBar() {
   const [visible,  setVisible]  = useState(true);
 
   useEffect(() => {
-    // Fast to 70%, then slow, then jump to 100%
-    const t1 = setTimeout(() => setProgress(40),  50);
-    const t2 = setTimeout(() => setProgress(65),  150);
-    const t3 = setTimeout(() => setProgress(80),  280);
-    const t4 = setTimeout(() => setProgress(95),  450);
-    const t5 = setTimeout(() => setProgress(100), 600);
-    const t6 = setTimeout(() => setVisible(false), 800);
+    const t1 = setTimeout(() => setProgress(20),  100);
+    const t2 = setTimeout(() => setProgress(45),  250);
+    const t3 = setTimeout(() => setProgress(68),  420);
+    const t4 = setTimeout(() => setProgress(85),  600);
+    const t5 = setTimeout(() => setProgress(100), 820);
+    const t6 = setTimeout(() => setVisible(false), 1050);
     return () => [t1,t2,t3,t4,t5,t6].forEach(clearTimeout);
   }, []);
 
   if (!visible) return null;
 
+  const circumference = 2 * Math.PI * 54; // r=54
+  const dashOffset    = circumference - (progress / 100) * circumference;
+
   return (
     <>
       <style>{`
-        @keyframes shimmerBar {
-          0%   { transform: translateX(-100%); }
-          100% { transform: translateX(400%); }
+        @keyframes spinRing  { to { transform: rotate(360deg); } }
+        @keyframes spinRing2 { to { transform: rotate(-360deg); } }
+        @keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
+        @keyframes countUp   { from { opacity:0; transform:scale(.8); } to { opacity:1; transform:scale(1); } }
+        @keyframes glowBeat  {
+          0%,100% { box-shadow: 0 0 10px #F59E0B88, 0 0 20px #F59E0B44; }
+          50%     { box-shadow: 0 0 22px #F59E0BCC, 0 0 44px #F59E0B66, 0 0 66px #F59E0B22; }
         }
-        @keyframes glowPulse {
-          0%,100% { box-shadow: 0 0 8px rgba(245,158,11,.6); }
-          50%      { box-shadow: 0 0 20px rgba(245,158,11,.9), 0 0 40px rgba(245,158,11,.3); }
+        @keyframes bgPulse {
+          0%,100% { background: rgba(30,27,75,.03); }
+          50%     { background: rgba(124,58,237,.06); }
         }
       `}</style>
 
-      {/* Top progress bar */}
+      {/* ── Full page overlay ── */}
       <div style={{
-        position:'fixed', top:0, left:0, right:0,
-        height:3, zIndex:9999,
-        background:'rgba(0,0,0,.06)',
-      }}>
-        {/* Track */}
-        <div style={{
-          height:'100%',
-          width:`${progress}%`,
-          background:'linear-gradient(90deg,#1E1B4B,#7C3AED,#F59E0B)',
-          borderRadius:'0 99px 99px 0',
-          transition:'width .3s cubic-bezier(.4,0,.2,1)',
-          position:'relative', overflow:'hidden',
-          animation:'glowPulse 1.5s ease-in-out infinite',
-        }}>
-          {/* Shimmer */}
-          <div style={{
-            position:'absolute', inset:0,
-            background:'linear-gradient(90deg,transparent 0%,rgba(255,255,255,.6) 50%,transparent 100%)',
-            animation:'shimmerBar 1.2s ease-in-out infinite',
-          }}/>
-        </div>
-
-        {/* Glow dot at tip */}
-        <div style={{
-          position:'absolute', top:'50%', left:`${progress}%`,
-          transform:'translate(-50%,-50%)',
-          width:8, height:8, borderRadius:'50%',
-          background:'#F59E0B',
-          boxShadow:'0 0 10px #F59E0B, 0 0 20px #F59E0B88',
-          transition:'left .3s cubic-bezier(.4,0,.2,1)',
-        }}/>
-      </div>
-
-      {/* Full page overlay with spinner */}
-      <div style={{
-        position:'fixed', inset:0, zIndex:9998,
-        background:'rgba(248,250,252,.85)',
-        backdropFilter:'blur(4px)',
+        position:'fixed', inset:0, zIndex:9999,
+        background:'rgba(248,250,252,.94)',
+        backdropFilter:'blur(8px)',
+        WebkitBackdropFilter:'blur(8px)',
         display:'flex', flexDirection:'column',
         alignItems:'center', justifyContent:'center',
-        gap:20,
-        opacity: progress < 100 ? 1 : 0,
-        transition:'opacity .2s ease',
+        animation:'fadeIn .18s ease',
       }}>
-        {/* Premium spinner */}
-        <div style={{position:'relative', width:56, height:56}}>
-          {/* Outer ring */}
-          <svg width="56" height="56" viewBox="0 0 56 56" style={{position:'absolute',inset:0,animation:'spin 1.4s linear infinite'}}
-            xmlns="http://www.w3.org/2000/svg">
-            <style>{'@keyframes spin{to{transform:rotate(360deg)}}'}</style>
-            <circle cx="28" cy="28" r="24" fill="none" stroke="#E2E8F0" strokeWidth="3"/>
-            <circle cx="28" cy="28" r="24" fill="none" stroke="url(#grad)" strokeWidth="3"
-              strokeLinecap="round" strokeDasharray="40 111"/>
+
+        {/* ── Decorative background ring ── */}
+        <div style={{
+          position:'absolute',
+          width:320, height:320,
+          borderRadius:'50%',
+          border:'1px solid rgba(124,58,237,.08)',
+          animation:'bgPulse 2s ease-in-out infinite',
+        }}/>
+        <div style={{
+          position:'absolute',
+          width:220, height:220,
+          borderRadius:'50%',
+          border:'1px solid rgba(245,158,11,.1)',
+          animation:'bgPulse 2s ease-in-out infinite',
+          animationDelay:'.5s',
+        }}/>
+
+        {/* ── Main spinner container ── */}
+        <div style={{ position:'relative', width:160, height:160, marginBottom:28 }}>
+
+          {/* Outer slow ring — Yellow */}
+          <svg width="160" height="160" viewBox="0 0 160 160"
+            style={{ position:'absolute', inset:0, animation:'spinRing 3s linear infinite' }}>
+            <circle cx="80" cy="80" r="72"
+              fill="none" stroke="#FDE68A" strokeWidth="2.5"
+              strokeDasharray="12 8" strokeLinecap="round"/>
+          </svg>
+
+          {/* Middle ring — Gradient progress */}
+          <svg width="160" height="160" viewBox="0 0 160 160"
+            style={{ position:'absolute', inset:0, transform:'rotate(-90deg)' }}>
+            {/* Track */}
+            <circle cx="80" cy="80" r="60"
+              fill="none" stroke="#EDE9FE" strokeWidth="10"/>
+            {/* Progress fill */}
+            <circle cx="80" cy="80" r="60"
+              fill="none"
+              stroke="url(#mainGrad)"
+              strokeWidth="10"
+              strokeLinecap="round"
+              strokeDasharray={`${(progress/100)*(2*Math.PI*60)} ${2*Math.PI*60}`}
+              style={{ transition:'stroke-dasharray .35s cubic-bezier(.4,0,.2,1)' }}/>
             <defs>
-              <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#1E1B4B"/>
-                <stop offset="100%" stopColor="#F59E0B"/>
+              <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stopColor="#1E1B4B"/>
+                <stop offset="40%"  stopColor="#7C3AED"/>
+                <stop offset="75%"  stopColor="#F59E0B"/>
+                <stop offset="100%" stopColor="#FDE68A"/>
               </linearGradient>
             </defs>
           </svg>
-          {/* Inner dot */}
+
+          {/* Inner spinning ring — Indigo dashes */}
+          <svg width="160" height="160" viewBox="0 0 160 160"
+            style={{ position:'absolute', inset:0, animation:'spinRing2 2s linear infinite' }}>
+            <circle cx="80" cy="80" r="46"
+              fill="none" stroke="#C4B5FD" strokeWidth="2"
+              strokeDasharray="6 10" strokeLinecap="round"/>
+          </svg>
+
+          {/* Center circle */}
           <div style={{
             position:'absolute', inset:0,
-            display:'flex', alignItems:'center', justifyContent:'center',
+            display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center',
+            gap:2,
           }}>
+            {/* Yellow glow dot */}
             <div style={{
-              width:16, height:16, borderRadius:'50%',
-              background:'linear-gradient(135deg,#1E1B4B,#7C3AED)',
-              boxShadow:'0 2px 8px rgba(30,27,75,.4)',
+              width:14, height:14, borderRadius:'50%',
+              background:'linear-gradient(135deg,#F59E0B,#FDE68A)',
+              marginBottom:4,
+              animation:'glowBeat 1.2s ease-in-out infinite',
             }}/>
+            {/* % counter */}
+            <div style={{
+              fontSize:28, fontWeight:900, color:'#1E1B4B',
+              lineHeight:1, fontFamily:'"Segoe UI",system-ui,sans-serif',
+              animation:'countUp .2s ease',
+              key: progress,
+            }}>
+              {progress}
+            </div>
+            <div style={{
+              fontSize:11, fontWeight:700, color:'#7C3AED',
+              letterSpacing:'.1em',
+            }}>%</div>
           </div>
         </div>
 
-        {/* Loading text */}
-        <div style={{textAlign:'center'}}>
+        {/* ── Text section ── */}
+        <div style={{ textAlign:'center', marginBottom:20 }}>
           <div style={{
-            fontSize:13, fontWeight:700, color:'#1E293B',
-            letterSpacing:'.02em', marginBottom:4,
+            fontSize:16, fontWeight:800, color:'#1E1B4B',
+            letterSpacing:'.02em', marginBottom:8,
+            fontFamily:'"Segoe UI",system-ui,sans-serif',
           }}>
             Loading EduErpee
           </div>
+
+          {/* Slim progress bar */}
           <div style={{
-            fontSize:11, color:'#94A3B8',
-            fontWeight:500,
+            width:200, height:4, background:'#EDE9FE',
+            borderRadius:99, overflow:'hidden', margin:'0 auto 8px',
+          }}>
+            <div style={{
+              height:'100%',
+              width:`${progress}%`,
+              background:'linear-gradient(90deg,#1E1B4B,#7C3AED,#F59E0B)',
+              borderRadius:99,
+              transition:'width .35s cubic-bezier(.4,0,.2,1)',
+              boxShadow:'0 0 8px rgba(245,158,11,.5)',
+            }}/>
+          </div>
+
+          <div style={{
+            fontSize:12, color:'#9CA3AF', fontWeight:500,
+            fontFamily:'"Segoe UI",system-ui,sans-serif',
           }}>
             Please wait…
           </div>
         </div>
 
-        {/* Progress percentage */}
-        <div style={{
-          padding:'4px 14px',
-          background:'linear-gradient(135deg,#1E1B4B15,#7C3AED15)',
-          border:'1px solid #1E1B4B22',
-          borderRadius:100,
-          fontSize:11, fontWeight:800,
-          color:'#1E1B4B',
-        }}>
-          {progress}%
+        {/* ── 3 dot indicator ── */}
+        <div style={{ display:'flex', gap:6 }}>
+          {[0,1,2].map(i => (
+            <div key={i} style={{
+              width:7, height:7, borderRadius:'50%',
+              background: i===0 ? '#1E1B4B' : i===1 ? '#7C3AED' : '#F59E0B',
+              opacity: progress > i*33 ? 1 : .25,
+              transition:'opacity .3s ease',
+              boxShadow: progress > i*33 ? `0 0 8px ${i===0?'#1E1B4B':i===1?'#7C3AED':'#F59E0B'}88` : 'none',
+            }}/>
+          ))}
         </div>
+
       </div>
     </>
   );
