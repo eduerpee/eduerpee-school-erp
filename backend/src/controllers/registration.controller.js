@@ -128,7 +128,10 @@ const convertToStudent = async (req, res) => {
   const lastName  = reg.student_last_name  || reg.student_name.split(' ').slice(1).join(' ') || '';
 
   let studentId;
-  await db.transaction(async (client) => {
+  const client = await db.getPool().connect();
+  try {
+    await client.query('BEGIN');
+
     const sRow = await client.query(
       `INSERT INTO students
          (school_id, admission_no, first_name, last_name,
@@ -153,14 +156,23 @@ const convertToStudent = async (req, res) => {
         [studentId, reg.parent_name||'', reg.mobile||'', reg.email||null]
       );
     }
+
     await client.query("UPDATE registrations SET status='converted' WHERE id=$1", [reg.id]);
+
     if (reg.enquiry_id) {
       await client.query(
         "UPDATE enquiries SET status='converted', converted_to_student_id=$1 WHERE id=$2",
         [studentId, reg.enquiry_id]
       );
     }
-  });
+
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
 
   res.json({
     success: true,

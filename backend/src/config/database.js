@@ -1,9 +1,7 @@
 const dns  = require('dns');
 const { Pool } = require('pg');
 const { logger } = require('../utils/logger');
-
 dns.setDefaultResultOrder('ipv4first');
-
 const poolConfig = process.env.DATABASE_URL
   ? {
       host:     'db.fttmxszfkvynhprcfzyr.supabase.co',
@@ -34,32 +32,25 @@ const poolConfig = process.env.DATABASE_URL
       connectionTimeoutMillis: 5000,
       allowExitOnIdle:      false,
     };
-
 const pool = new Pool(poolConfig);
-
 pool.on('error', (err) => logger.error('Unexpected DB error:', err));
-
 // ── Simple cache for frequent static queries ──────────────────────
 const cache     = new Map();
 const CACHE_TTL = 60 * 1000; // 1 minute
-
 function cacheGet(key) {
   const entry = cache.get(key);
   if (!entry) return null;
   if (Date.now() - entry.ts > CACHE_TTL) { cache.delete(key); return null; }
   return entry.data;
 }
-
 function cacheSet(key, data) {
   cache.set(key, { data, ts: Date.now() });
 }
-
 function cacheClear(pattern) {
   for (const key of cache.keys()) {
     if (key.includes(pattern)) cache.delete(key);
   }
 }
-
 // ── DB helper methods ─────────────────────────────────────────────
 const db = {
   query:    (text, params) => pool.query(text, params),
@@ -82,7 +73,6 @@ const db = {
   cacheGet, cacheSet, cacheClear,
   getPool: () => pool,
 };
-
 // ── Test connection on startup ────────────────────────────────────
 async function testConnection() {
   try {
@@ -106,7 +96,5 @@ async function testConnection() {
     process.exit(1);
   }
 }
-
 testConnection();
-
 module.exports = db;
