@@ -2,6 +2,7 @@ const dns = require('dns');
 dns.setDefaultResultOrder('ipv4first');
 
 const express    = require('express');
+require('express-async-errors'); // ← catches all async throws automatically
 const cors       = require('cors');
 const helmet     = require('helmet');
 const morgan     = require('morgan');
@@ -50,19 +51,30 @@ app.use('/api/rooms',         require('./routes/room.routes'));
 app.use('/api/tc',            require('./routes/tc.routes'));
 app.use('/api/reports',       require('./routes/report.routes'));
 
-// ── Global error handler ──────────────────────────────────────
+// ── 404 handler ───────────────────────────────────────────────
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` });
+});
+
+// ── Global error handler (must be last) ──────────────────────
 app.use((err, req, res, next) => {
   console.error('Error:', err.message);
+
+  // PostgreSQL errors
+  if (err.code === '23505') return res.status(409).json({ success: false, message: 'A record with this information already exists.' });
+  if (err.code === '23503') return res.status(400).json({ success: false, message: 'Referenced record does not exist.' });
+  if (err.code === '23514') return res.status(400).json({ success: false, message: 'Data validation failed. Check amounts and constraints.' });
+
+  // JWT errors
+  if (err.name === 'JsonWebTokenError') return res.status(401).json({ success: false, message: 'Invalid token. Please log in again.' });
+  if (err.name === 'TokenExpiredError') return res.status(401).json({ success: false, message: 'Token expired. Please log in again.' });
+
   const status = err.statusCode || err.status || 500;
   res.status(status).json({
     success: false,
     message: err.message || 'Internal server error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
-});
-
-// ── 404 handler ───────────────────────────────────────────────
-app.use((req, res) => {
-  res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` });
 });
 
 // ── Start server ──────────────────────────────────────────────
