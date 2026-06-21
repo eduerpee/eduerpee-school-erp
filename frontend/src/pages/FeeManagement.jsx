@@ -313,13 +313,13 @@ export default function FeeManagement() {
         {tab==='structure' && (
           <div style={{display:'flex',gap:10}}>
             <button onClick={()=>{setEditType(null);setTypeForm({name:'',code:'',description:'',frequency:'monthly',isRecurring:true});setShowTypeModal(true);}}
-              style={{padding:'9px 16px',border:'1.5px solid #1E1B4B',borderRadius:9,background:'#EDE9F8',color:'#1E1B4B',fontSize:13,fontWeight:700,cursor:'pointer'}}>
-              + Add Fee Head
+              style={{display:'flex',alignItems:'center',gap:6,padding:'9px 16px',border:'1.5px solid #7B6FD4',borderRadius:9,background:'#EEEDFE',color:'#534AB7',fontSize:13,fontWeight:700,cursor:'pointer'}}>
+              <i className='ti ti-plus' style={{fontSize:16}}/> Add Fee Head
             </button>
             {selClassId && editRows.some(r=>r.enabled) && (
               <button onClick={handleSaveStructure} disabled={saving}
-                style={{padding:'9px 20px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>
-                {saving?'⏳ Saving…':'💾 Save Structure'}
+                style={{display:'flex',alignItems:'center',gap:6,padding:'9px 20px',background:saving?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.35)'}}>
+                <i className='ti ti-device-floppy' style={{fontSize:16}}/>{saving?'Saving…':'Save Structure'}
               </button>
             )}
           </div>
@@ -327,10 +327,21 @@ export default function FeeManagement() {
       </div>
 
       {/* Tabs */}
-      <div style={{display:'flex',borderBottom:'2px solid #E5E7EB',marginBottom:0}}>
-        {[['structure','⚙️ Fee Structure'],['collect','💳 Collect Fee'],['pending','⏳ Pending Fees'],['report','📊 Collection Report']].map(([key,label])=>(
+      <div style={{display:'flex',gap:8,marginBottom:4,flexWrap:'wrap'}}>
+        {[
+          ['structure','Fee Structure',     'ti-layout-grid', '#7B6FD4','#EEEDFE'],
+          ['collect',  'Collect Fee',       'ti-credit-card', '#0F6E56','#E1F5EE'],
+          ['pending',  'Pending Fees',      'ti-clock',       '#BA7517','#FAEEDA'],
+          ['report',   'Collection Report', 'ti-chart-bar',   '#185FA5','#E6F1FB'],
+        ].map(([key,label,icon,color,bg])=>(
           <button key={key} onClick={()=>setTab(key)}
-            style={{padding:'10px 18px',border:'none',borderBottom:tab===key?'2px solid #1E1B4B':'2px solid transparent',background:'transparent',color:tab===key?'#1E1B4B':'#6B7280',fontSize:13,fontWeight:tab===key?700:500,cursor:'pointer',marginBottom:-2,whiteSpace:'nowrap'}}>
+            style={{display:'flex',alignItems:'center',gap:8,padding:'9px 18px',borderRadius:12,border:'none',fontSize:13,fontWeight:600,cursor:'pointer',transition:'all .18s',
+              background:tab===key ? 'linear-gradient(135deg,'+color+','+color+'CC)' : '#fff',
+              color:tab===key?'#fff':color,
+              boxShadow:tab===key?'0 4px 12px '+color+'40':'0 1px 4px rgba(0,0,0,0.06)',
+              outline:tab!==key?'1px solid '+bg:'none',
+            }}>
+            <i className={'ti '+icon} style={{fontSize:16}}/>
             {label}
           </button>
         ))}
@@ -343,19 +354,29 @@ export default function FeeManagement() {
           {/* Left: Fee Types list */}
           <div>
             <div style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,overflow:'hidden'}}>
-              <div style={{padding:'12px 14px',borderBottom:'1px solid #E5E7EB',fontWeight:700,fontSize:13,color:'#111827',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                Fee Heads
+              <div style={{padding:'12px 14px',borderBottom:'1px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                <div style={{display:'flex',alignItems:'center',gap:8}}>
+                  <div style={{width:28,height:28,background:'#EEEDFE',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                    <i className='ti ti-credit-card' style={{fontSize:15,color:'#534AB7'}}/>
+                  </div>
+                  <span style={{fontWeight:700,fontSize:13,color:'#111827'}}>Fee Heads</span>
+                </div>
                 <span style={{fontSize:11,fontWeight:400,color:'#9CA3AF'}}>{feeTypes.length} total</span>
               </div>
               {feeTypes.length === 0
                 ? <div style={{padding:24,textAlign:'center',color:'#9CA3AF',fontSize:12}}>No fee heads yet<br/>Click "+ Add Fee Head"</div>
                 : feeTypes.map(ft => (
                     <div key={ft.id} style={{padding:'10px 14px',borderBottom:'0.5px solid #F3F4F6',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                      <div>
-                        <div style={{fontWeight:600,fontSize:12,color:'#111827'}}>{ft.name}</div>
-                        <div style={{fontSize:10,color:'#9CA3AF',marginTop:2}}>
-                          {FREQ[ft.frequency]||ft.frequency}
-                          {ft.code ? ' · ' + ft.code : ''}
+                      <div style={{display:'flex',alignItems:'center',gap:10}}>
+                        <div style={{width:32,height:32,borderRadius:9,background:['#EEEDFE','#DBEAFE','#FCE7F3','#D1FAE5','#FEF3C7','#FEE2E2','#E1F5EE'][feeTypes.indexOf(ft)%7],display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                          <i className={'ti '+['ti-school','ti-file-text','ti-writing','ti-bus','ti-books','ti-tool','ti-receipt-2'][feeTypes.indexOf(ft)%7]} style={{fontSize:15,color:['#534AB7','#1E40AF','#9D174D','#065F46','#92400E','#991B1B','#0F6E56'][feeTypes.indexOf(ft)%7]}}/>
+                        </div>
+                        <div>
+                          <div style={{fontWeight:600,fontSize:12,color:'#111827'}}>{ft.name}</div>
+                          <div style={{fontSize:10,color:'#9CA3AF',marginTop:2}}>
+                            {FREQ[ft.frequency]||ft.frequency}
+                            {ft.code ? ' · ' + ft.code : ''}
+                          </div>
                         </div>
                       </div>
                       <div style={{display:'flex',gap:6}}>
@@ -374,11 +395,17 @@ export default function FeeManagement() {
           <div>
             {/* Class selector */}
             <div style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:16,marginBottom:16}}>
-              <label style={lbl}>Select Class to Configure Fee Structure</label>
+              <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:10}}>
+                <div style={{width:28,height:28,background:'#E1F5EE',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <i className='ti ti-layout-grid' style={{fontSize:15,color:'#0F6E56'}}/>
+                </div>
+                <span style={{fontWeight:700,fontSize:13,color:'#111827'}}>Select Class</span>
+              </div>
               <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
                 {classes.map(c => (
                   <button key={c.id} onClick={()=>{setSelClass(c.name);setSelClassId(c.id);}}
-                    style={{padding:'7px 14px',border:'1.5px solid '+(selClassId===c.id?'#1E1B4B':'#E5E7EB'),borderRadius:9,background:selClassId===c.id?'#1E1B4B':'#fff',color:selClassId===c.id?'#fff':'#374151',fontSize:12,fontWeight:selClassId===c.id?700:400,cursor:'pointer',transition:'all .15s'}}>
+                    style={{display:'flex',alignItems:'center',gap:5,padding:'7px 12px',border:'1.5px solid '+(selClassId===c.id?'#7B6FD4':'#E5E7EB'),borderRadius:9,background:selClassId===c.id?'linear-gradient(135deg,#7B6FD4,#A89DE8)':'#fff',color:selClassId===c.id?'#fff':'#374151',fontSize:12,fontWeight:selClassId===c.id?700:400,cursor:'pointer',transition:'all .15s',boxShadow:selClassId===c.id?'0 4px 10px rgba(123,111,212,0.35)':'none'}}>
+                    <i className='ti ti-school' style={{fontSize:13}}/>
                     {c.name}
                   </button>
                 ))}
@@ -387,10 +414,12 @@ export default function FeeManagement() {
             </div>
 
             {!selClassId
-              ? <div style={{background:'#F9FAFB',borderRadius:14,border:'2px dashed #E5E7EB',padding:48,textAlign:'center',color:'#9CA3AF'}}>
-                  <div style={{fontSize:36,marginBottom:10}}>💰</div>
-                  <div style={{fontWeight:600,color:'#6B7280'}}>Select a class above to configure fee structure</div>
-                  <div style={{fontSize:12,marginTop:4}}>Each class can have different fee heads and amounts</div>
+              ? <div style={{background:'linear-gradient(135deg,#EEEDFE,#F5F3FF)',borderRadius:14,border:'1px dashed #A89DE8',padding:48,textAlign:'center'}}>
+                  <div style={{width:52,height:52,background:'#7B6FD4',borderRadius:14,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 14px'}}>
+                    <i className='ti ti-credit-card' style={{fontSize:26,color:'white'}}/>
+                  </div>
+                  <div style={{fontWeight:700,fontSize:14,color:'#534AB7',marginBottom:6}}>Configure Fee Structure</div>
+                  <div style={{fontSize:12,color:'#9CA3AF'}}>Select a class above to set fee amounts for each fee head</div>
                 </div>
               : <div style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,overflow:'hidden'}}>
                   <div style={{padding:'12px 16px',borderBottom:'1px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center',background:'#F9FAFB'}}>
