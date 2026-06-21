@@ -38,8 +38,8 @@ function Particles() {
 }
 
 export default function Login() {
-  const [username,   setUsername]   = useState('admin');
-  const [password,   setPassword]   = useState('admin123');
+  const [username,   setUsername]   = useState('');
+  const [password,   setPassword]   = useState('');
   const [showPass,   setShowPass]   = useState(false);
   const [loading,    setLoading]    = useState(false);
   const [error,      setError]      = useState('');
@@ -223,16 +223,16 @@ export default function Login() {
             </form>
           </div>
 
-          {/* Quick login */}
           <div style={{padding:'14px 16px',background:'#fff',borderRadius:12,border:'1px solid #E2E8F0',boxShadow:'0 1px 6px rgba(15,23,42,.04)'}}>
-            <p style={{fontSize:10,fontWeight:700,color:'#94A3B8',textTransform:'uppercase',letterSpacing:'.1em',marginBottom:10}}>Quick Demo Access</p>
-            <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
-              {[['admin','🔑 Admin',primary,'#fff'],['principal','👔 Principal','#1E40AF','#fff'],['teacher1','📖 Teacher','#065F46','#fff'],['accountant','💼 Accounts','#92400E','#fff']].map(([u,label,bg,col])=>(
-                <button key={u} type="button" onClick={()=>{setUsername(u);setPassword('admin123');}}
-                  style={{padding:'6px 12px',background:bg,border:'none',borderRadius:100,fontSize:11,fontWeight:600,color:col,cursor:'pointer'}}>
-                  {label}
-                </button>
-              ))}
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+              <div>
+                <p style={{fontSize:9,fontWeight:700,color:'#94A3B8',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:5}}>Registered Office</p>
+                <p style={{fontSize:10,color:'#475569',lineHeight:1.7,margin:0}}>519/216A, KATRA,<br/>Mubarak Pur, Azamgarh – Sadar,<br/>Uttar Pradesh – 276404, India</p>
+              </div>
+              <div style={{borderLeft:'1px solid #F1F5F9',paddingLeft:12}}>
+                <p style={{fontSize:9,fontWeight:700,color:'#94A3B8',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:5}}>Branch Office</p>
+                <p style={{fontSize:10,color:'#475569',lineHeight:1.7,margin:0}}>Near Shiva Smart City-2,<br/>Talabpur Dadri, Gr. Noida,<br/>Uttar Pradesh – 203207, India</p>
+              </div>
             </div>
           </div>
 
@@ -307,7 +307,7 @@ export default function Login() {
                   <div style={{position:'absolute',left:14,top:'50%',transform:'translateY(-50%)',color:'#9CA3AF',pointerEvents:'none'}}>
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
                   </div>
-                  <input type="text" value={username} onChange={e=>setUsername(e.target.value)} placeholder="Enter your username" autoFocus style={inp({padding:'13px 14px 13px 42px'})}
+                  <input type="text" value={username} onChange={e=>setUsername(e.target.value)} placeholder="Enter your username" autoFocus autoComplete="off" style={inp({padding:'13px 14px 13px 42px'})}
                     onFocus={e=>{e.target.style.borderColor=primary;e.target.style.background='#fff';e.target.style.boxShadow=`0 0 0 3px ${primary}18`;}}
                     onBlur={e=>{e.target.style.borderColor='#E5E7EB';e.target.style.background='#FAFAFA';e.target.style.boxShadow='none';}}/>
                 </div>
@@ -318,7 +318,7 @@ export default function Login() {
                   <div style={{position:'absolute',left:14,top:'50%',transform:'translateY(-50%)',color:'#9CA3AF',pointerEvents:'none'}}>
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M8 11V7a4 4 0 018 0v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
                   </div>
-                  <input type={showPass?'text':'password'} value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" style={inp({padding:'13px 44px 13px 42px'})}
+                  <input type={showPass?'text':'password'} value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" autoComplete="new-password" style={inp({padding:'13px 44px 13px 42px'})}
                     onFocus={e=>{e.target.style.borderColor=primary;e.target.style.background='#fff';e.target.style.boxShadow=`0 0 0 3px ${primary}18`;}}
                     onBlur={e=>{e.target.style.borderColor='#E5E7EB';e.target.style.background='#FAFAFA';e.target.style.boxShadow='none';}}/>
                   <button type="button" onClick={()=>setShowPass(p=>!p)} style={{position:'absolute',right:13,top:'50%',transform:'translateY(-50%)',background:'none',border:'none',cursor:'pointer',color:'#9CA3AF',padding:4,display:'flex',alignItems:'center'}}>
@@ -339,15 +339,19 @@ export default function Login() {
           </div>
 
           <div style={{padding:'16px 18px',background:'#fff',borderRadius:14,border:'1px solid #E2E8F0',boxShadow:'0 2px 8px rgba(15,23,42,.04)'}}>
-            <p style={{fontSize:10,fontWeight:700,color:'#94A3B8',textTransform:'uppercase',letterSpacing:'.1em',marginBottom:10}}>Quick Demo Access (pw: admin123)</p>
-            <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
-              {[['admin','🔑 Admin',primary,'#fff'],['principal','👔 Principal','#1E40AF','#fff'],['teacher1','📖 Teacher','#065F46','#fff'],['accountant','💼 Accountant','#92400E','#fff'],['parent1','👪 Parent','#7C1D6F','#fff']].map(([u,label,bg,col])=>(
-                <button key={u} type="button" onClick={()=>{setUsername(u);setPassword('admin123');}}
-                  style={{padding:'5px 12px',background:bg,border:'none',borderRadius:100,fontSize:11,fontWeight:600,color:col,cursor:'pointer',transition:'opacity .15s',opacity:.85}}
-                  onMouseEnter={e=>e.target.style.opacity='1'} onMouseLeave={e=>e.target.style.opacity='.85'}>
-                  {label}
-                </button>
-              ))}
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
+              <div>
+                <p style={{fontSize:10,fontWeight:700,color:'#94A3B8',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:6}}>Registered Office</p>
+                <p style={{fontSize:11,color:'#475569',lineHeight:1.7,margin:0}}>
+                  519/216A, KATRA,<br/>Mubarak Pur, Azamgarh – Sadar,<br/>Uttar Pradesh – 276404,<br/>India
+                </p>
+              </div>
+              <div style={{borderLeft:'1px solid #F1F5F9',paddingLeft:14}}>
+                <p style={{fontSize:10,fontWeight:700,color:'#94A3B8',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:6}}>Branch Office</p>
+                <p style={{fontSize:11,color:'#475569',lineHeight:1.7,margin:0}}>
+                  Near Shiva Smart City-2,<br/>Talabpur Dadri, Gr. Noida,<br/>Uttar Pradesh – 203207,<br/>India
+                </p>
+              </div>
             </div>
           </div>
           <p style={{textAlign:'center',marginTop:24,fontSize:11,color:'#CBD5E1'}}>
