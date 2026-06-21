@@ -236,21 +236,19 @@ export default function Dashboard() {
 
   const StatCard = ({ card }) => (
     <div
-      style={CARD_STYLE}
+      style={{...CARD_STYLE_BASE, ...dm.card}}
       onClick={() => navigate(card.path)}
       onMouseEnter={hoverOn}
       onMouseLeave={hoverOff}
     >
-      {/* Illustration top */}
       <div style={{ background: card.gradient, width: '100%', height: 110, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
         {card.svg}
       </div>
-      {/* Body */}
       <div style={{ padding: '14px 16px 16px' }}>
         <div style={{ fontSize: 24, fontWeight: 600, color: card.valueColor, lineHeight: 1, marginBottom: 3 }}>
           {isLoading ? '…' : card.value}
         </div>
-        <div style={{ fontSize: 13, color: '#6B7280' }}>{card.label}</div>
+        <div style={{ fontSize: 13, color: dm.label }}>{card.label}</div>
         <span style={{ display: 'inline-block', fontSize: 11, padding: '3px 10px', borderRadius: 20, marginTop: 8, background: card.tagBg, color: card.tagColor }}>
           {card.tag}
         </span>
@@ -262,19 +260,61 @@ export default function Dashboard() {
   const barW   = 44;
   const chartW = Math.max(monthlyCollection.length * 64 + 40, 440);
 
+  const [darkMode, setDarkMode] = React.useState(() => localStorage.getItem('dashboard_dark') === 'true');
+
+  React.useEffect(() => {
+    localStorage.setItem('dashboard_dark', darkMode);
+  }, [darkMode]);
+
+  const dm = {
+    page:       darkMode ? { background:'#0F172A', minHeight:'100%', margin:-20, padding:20 } : {},
+    heading:    darkMode ? '#F1F5F9' : '#111827',
+    subtext:    darkMode ? '#94A3B8' : '#6B7280',
+    datetext:   darkMode ? '#CBD5E1' : '#374151',
+    card:       darkMode ? { background:'#1E293B', border:'0.5px solid #334155', boxShadow:'0 2px 16px rgba(0,0,0,0.4)' } : { background:'#fff', border:'0.5px solid #E5E7EB', boxShadow:'0 2px 16px rgba(0,0,0,0.08)' },
+    section:    darkMode ? { background:'#1E293B', border:'0.5px solid #334155' } : { background:'#fff', border:'0.5px solid #E5E7EB' },
+    label:      darkMode ? '#94A3B8' : '#6B7280',
+    text:       darkMode ? '#E2E8F0' : '#111827',
+    subCard:    darkMode ? '#0F172A' : '#F9FAFB',
+    borderClr:  darkMode ? '#334155' : '#F3F4F6',
+    barFill:    darkMode ? '#6366F1' : '#7B6FD4',
+    barText:    darkMode ? '#94A3B8' : '#9CA3AF',
+    barVal:     darkMode ? '#A5B4FC' : '#534AB7',
+    chartLine:  darkMode ? '#1E293B' : '#F3F4F6',
+    noticeDot:  darkMode ? '#818CF8' : '#7B6FD4',
+    noticeText: darkMode ? '#E2E8F0' : undefined,
+    noticeDate: darkMode ? '#64748B' : '#9CA3AF',
+    actionBg:   darkMode ? '#0F172A' : '#F9FAFB',
+    actionBdr:  darkMode ? '#334155' : '#E5E7EB',
+    actionText: darkMode ? '#CBD5E1' : '#4B5563',
+    progBg:     darkMode ? '#0F172A' : '#F3F4F6',
+    tblHead:    darkMode ? '#0F172A' : '#F9FAFB',
+    tblBorder:  darkMode ? '#1E293B' : '#F3F4F6',
+    tblText:    darkMode ? '#94A3B8' : '#6B7280',
+  };
+
   return (
-    <div>
+    <div style={dm.page}>
       {/* Header */}
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:22, flexWrap:'wrap', gap:12 }}>
         <div>
-          <h1 style={{ fontSize:22, fontWeight:700, color:'#111827' }}>
-            {greeting}, {user?.fullName?.split(' ')[0]||user?.full_name?.split(' ')[0]||'Admin'} 👋
+          <h1 style={{ fontSize:22, fontWeight:700, color:dm.heading }}>
+            {greeting}, {user?.fullName?.split(' ')[0]||user?.full_name?.split(' ')[0]||'Admin'}
           </h1>
-          <p style={{ fontSize:12, color:'#6B7280', marginTop:4 }}>
-            {isLoading ? '⏳ Loading…' : isError ? '🔴 Connection error' : '🟢 Live data'}
-            {' '}· Academic Year 2025–26 · {new Date().toDateString()}
+          <p style={{ fontSize:12, color:'#6B7280', marginTop:4, display:'flex', alignItems:'center', gap:6 }}>
+            {isLoading ? '⏳' : isError ? '🔴' : '🟢'}
+            <strong style={{ color:'#374151', fontWeight:700 }}>Academic Year 2025–26 · {new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</strong>
           </p>
         </div>
+        <button onClick={() => setDarkMode(d => !d)}
+          style={{ display:'flex', alignItems:'center', gap:7, padding:'8px 16px', borderRadius:10,
+            background: darkMode ? '#1E293B' : '#F1F5F9',
+            border: darkMode ? '1px solid #334155' : '1px solid #E5E7EB',
+            color: darkMode ? '#CBD5E1' : '#374151',
+            fontSize:12, fontWeight:600, cursor:'pointer', transition:'all .2s' }}>
+          <i className={'ti '+(darkMode?'ti-sun':'ti-moon')} style={{fontSize:16}}/>
+          {darkMode ? 'Light Mode' : 'Dark Mode'}
+        </button>
       </div>
 
       {/* Row 1 */}
@@ -289,9 +329,9 @@ export default function Dashboard() {
 
       {/* Chart + Notices */}
       <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr', gap:16, marginBottom:16 }}>
-        <div style={{ background:'#fff', border:'0.5px solid #E5E7EB', borderRadius:14 }}>
-          <div style={{ padding:'14px 18px', borderBottom:'0.5px solid #F3F4F6', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-            <span style={{ fontSize:13, fontWeight:600 }}>📊 Monthly Fee Collection</span>
+        <div style={{ ...dm.section, borderRadius:14 }}>
+          <div style={{ padding:'14px 18px', borderBottom:'0.5px solid '+dm.borderClr, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <span style={{ fontSize:13, fontWeight:600, color:dm.text }}>📊 Monthly Fee Collection</span>
             <span style={{ fontSize:11, color:'#9CA3AF' }}>Last {monthlyCollection.length||0} months</span>
           </div>
           <div style={{ padding:'16px 20px', overflowX:'auto' }}>
@@ -300,8 +340,8 @@ export default function Dashboard() {
               : <svg width="100%" viewBox={`0 0 ${chartW} 160`} style={{ overflow:'visible', minWidth:300 }}>
                   {[0,25,50,75,100].map((p,i) => (
                     <g key={p}>
-                      <line x1="38" y1={10+i*28} x2={chartW} y2={10+i*28} stroke="#F3F4F6" strokeWidth="1"/>
-                      <text x="0" y={14+i*28} fontSize="8" fill="#9CA3AF">{fmtK((maxBar*(100-p)/100))}</text>
+                      <line x1="38" y1={10+i*28} x2={chartW} y2={10+i*28} stroke={dm.chartLine} strokeWidth="1"/>
+                      <text x="0" y={14+i*28} fontSize="8" fill={dm.barText}>{fmtK((maxBar*(100-p)/100))}</text>
                     </g>
                   ))}
                   {monthlyCollection.map((m,i) => {
@@ -310,9 +350,9 @@ export default function Dashboard() {
                     const y = 120 - h;
                     return (
                       <g key={m.month_key}>
-                        <rect x={x} y={y} width={barW} height={h} rx="4" fill="#7B6FD4" opacity=".85"/>
-                        <text x={x+barW/2} y={138} fontSize="8" fill="#9CA3AF" textAnchor="middle">{m.month}</text>
-                        <text x={x+barW/2} y={y-4} fontSize="8" fill="#534AB7" textAnchor="middle" fontWeight="700">{fmtK(m.total_collected)}</text>
+                        <rect x={x} y={y} width={barW} height={h} rx="4" fill={dm.barFill} opacity=".85"/>
+                        <text x={x+barW/2} y={138} fontSize="8" fill={dm.barText} textAnchor="middle">{m.month}</text>
+                        <text x={x+barW/2} y={y-4} fontSize="8" fill={dm.barVal} textAnchor="middle" fontWeight="700">{fmtK(m.total_collected)}</text>
                       </g>
                     );
                   })}
@@ -321,20 +361,20 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div style={{ background:'#fff', border:'0.5px solid #E5E7EB', borderRadius:14 }}>
-          <div style={{ padding:'14px 16px', borderBottom:'0.5px solid #F3F4F6', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-            <span style={{ fontSize:13, fontWeight:600 }}>📢 Notices</span>
+        <div style={{ ...dm.section, borderRadius:14 }}>
+          <div style={{ padding:'14px 16px', borderBottom:'0.5px solid '+dm.borderClr, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <span style={{ fontSize:13, fontWeight:600, color:dm.text }}>📢 Notices</span>
             <button onClick={() => navigate('/notices')} style={{ fontSize:11, color:'#7B6FD4', background:'none', border:'none', cursor:'pointer', fontWeight:600 }}>View all →</button>
           </div>
           <div style={{ padding:'8px 16px' }}>
             {notices.length === 0
-              ? <div style={{ padding:'20px 0', textAlign:'center', color:'#9CA3AF', fontSize:12 }}>No notices published</div>
+              ? <div style={{ padding:'20px 0', textAlign:'center', color:dm.label, fontSize:12 }}>No notices published</div>
               : notices.map((n,i) => (
-                  <div key={n.id||i} style={{ padding:'9px 0', borderBottom:'0.5px solid #F9FAFB', display:'flex', gap:10 }}>
-                    <div style={{ width:6, height:6, borderRadius:'50%', background:'#7B6FD4', flexShrink:0, marginTop:5 }}/>
+                  <div key={n.id||i} style={{ padding:'9px 0', borderBottom:'0.5px solid '+dm.borderClr, display:'flex', gap:10 }}>
+                    <div style={{ width:6, height:6, borderRadius:'50%', background:dm.noticeDot, flexShrink:0, marginTop:5 }}/>
                     <div>
-                      <div style={{ fontSize:12, fontWeight:600, lineHeight:1.4 }}>{n.title}</div>
-                      <div style={{ fontSize:10, color:'#9CA3AF', marginTop:2 }}>{n.posted_by} · {new Date(n.publish_date).toLocaleDateString('en-IN')}</div>
+                      <div style={{ fontSize:12, fontWeight:600, lineHeight:1.4, color:dm.noticeText }}>{n.title}</div>
+                      <div style={{ fontSize:10, color:dm.noticeDate, marginTop:2 }}>{n.posted_by} · {new Date(n.publish_date).toLocaleDateString('en-IN')}</div>
                     </div>
                   </div>
                 ))
@@ -345,23 +385,23 @@ export default function Dashboard() {
 
       {/* Recent Admissions + Quick Actions */}
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom:16 }}>
-        <div style={{ background:'#fff', border:'0.5px solid #E5E7EB', borderRadius:14, overflow:'hidden' }}>
-          <div style={{ padding:'12px 16px', borderBottom:'0.5px solid #F3F4F6', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-            <span style={{ fontSize:13, fontWeight:600 }}>🆕 Recent Admissions</span>
+        <div style={{ ...dm.section, borderRadius:14, overflow:'hidden' }}>
+          <div style={{ padding:'12px 16px', borderBottom:'0.5px solid '+dm.borderClr, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <span style={{ fontSize:13, fontWeight:600, color:dm.text }}>🆕 Recent Admissions</span>
             <button onClick={() => navigate('/students')} style={{ fontSize:11, color:'#7B6FD4', background:'none', border:'none', cursor:'pointer', fontWeight:600 }}>View all →</button>
           </div>
           {recentAdmissions.length === 0
-            ? <div style={{ padding:'24px', textAlign:'center', color:'#9CA3AF', fontSize:12 }}>No new admissions in last 30 days</div>
+            ? <div style={{ padding:'24px', textAlign:'center', color:dm.label, fontSize:12 }}>No new admissions in last 30 days</div>
             : <table style={{ width:'100%', borderCollapse:'collapse', fontSize:12 }}>
-                <thead><tr style={{ background:'#F9FAFB' }}>
-                  {['Student','Class','Date','Status'].map(h => <th key={h} style={{ padding:'8px 12px', textAlign:'left', color:'#6B7280', fontSize:10, fontWeight:700, textTransform:'uppercase' }}>{h}</th>)}
+                <thead><tr style={{ background:dm.tblHead }}>
+                  {['Student','Class','Date','Status'].map(h => <th key={h} style={{ padding:'8px 12px', textAlign:'left', color:dm.tblText, fontSize:10, fontWeight:700, textTransform:'uppercase' }}>{h}</th>)}
                 </tr></thead>
                 <tbody>
                   {recentAdmissions.map(s => (
-                    <tr key={s.id} style={{ borderBottom:'0.5px solid #F3F4F6' }}>
-                      <td style={{ padding:'9px 12px', fontWeight:600 }}>{s.first_name} {s.last_name}</td>
-                      <td style={{ padding:'9px 12px', color:'#6B7280' }}>{s.class_name} {s.section_name}</td>
-                      <td style={{ padding:'9px 12px', color:'#9CA3AF', fontSize:11 }}>{new Date(s.admission_date).toLocaleDateString('en-IN')}</td>
+                    <tr key={s.id} style={{ borderBottom:'0.5px solid '+dm.tblBorder }}>
+                      <td style={{ padding:'9px 12px', fontWeight:600, color:dm.text }}>{s.first_name} {s.last_name}</td>
+                      <td style={{ padding:'9px 12px', color:dm.label }}>{s.class_name} {s.section_name}</td>
+                      <td style={{ padding:'9px 12px', color:dm.noticeDate, fontSize:11 }}>{new Date(s.admission_date).toLocaleDateString('en-IN')}</td>
                       <td style={{ padding:'9px 12px' }}><span style={{ padding:'2px 8px', borderRadius:20, fontSize:10, background:'#D1FAE5', color:'#065F46' }}>Active</span></td>
                     </tr>
                   ))}
@@ -370,9 +410,9 @@ export default function Dashboard() {
           }
         </div>
 
-        <div style={{ background:'#fff', border:'0.5px solid #E5E7EB', borderRadius:14 }}>
-          <div style={{ padding:'12px 16px', borderBottom:'0.5px solid #F3F4F6' }}>
-            <span style={{ fontSize:13, fontWeight:600 }}>⚡ Quick Actions</span>
+        <div style={{ ...dm.section, borderRadius:14 }}>
+          <div style={{ padding:'12px 16px', borderBottom:'0.5px solid '+dm.borderClr }}>
+            <span style={{ fontSize:13, fontWeight:600, color:dm.text }}>⚡ Quick Actions</span>
           </div>
           <div style={{ padding:14, display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10 }}>
             {[
@@ -386,14 +426,14 @@ export default function Dashboard() {
               { label:'Library',       path:'/library',     gradient:'linear-gradient(145deg,#7B6FD4,#C4BAF2)', svg:<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="6" width="6" height="24" rx="2" fill="white" opacity="0.5"/><rect x="12" y="8" width="5" height="22" rx="2" fill="white" opacity="0.7"/><rect x="19" y="4" width="7" height="26" rx="2" fill="white" opacity="0.55"/><rect x="28" y="8" width="5" height="22" rx="2" fill="white" opacity="0.65"/><line x1="3" y1="31" x2="34" y2="31" stroke="white" strokeWidth="2" opacity="0.5" strokeLinecap="round"/></svg> },
             ].map(({ label, path, gradient, svg }) => (
               <div key={label} onClick={() => navigate(path)}
-                style={{ borderRadius:14, overflow:'hidden', cursor:'pointer', transition:'all .18s', boxShadow:'0 2px 8px rgba(0,0,0,0.07)' }}
+                style={{ borderRadius:14, overflow:'hidden', cursor:'pointer', transition:'all .18s', boxShadow: darkMode ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.07)' }}
                 onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 8px 20px rgba(0,0,0,0.13)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow='0 2px 8px rgba(0,0,0,0.07)'; }}>
                 <div style={{ background:gradient, height:60, display:'flex', alignItems:'center', justifyContent:'center' }}>
                   {svg}
                 </div>
-                <div style={{ background:'#fff', padding:'7px 4px', textAlign:'center', borderTop:'0.5px solid #F3F4F6' }}>
-                  <span style={{ fontSize:10, fontWeight:600, color:'#374151' }}>{label}</span>
+                <div style={{ background: darkMode ? '#1E293B' : '#fff', padding:'7px 4px', textAlign:'center', borderTop:'0.5px solid '+dm.borderClr }}>
+                  <span style={{ fontSize:10, fontWeight:600, color:dm.actionText }}>{label}</span>
                 </div>
               </div>
             ))}
@@ -402,9 +442,9 @@ export default function Dashboard() {
       </div>
 
       {/* Class-wise Fee Collection */}
-      <div style={{ background:'#fff', border:'0.5px solid #E5E7EB', borderRadius:14 }}>
-        <div style={{ padding:'12px 18px', borderBottom:'0.5px solid #F3F4F6', display:'flex', justifyContent:'space-between' }}>
-          <span style={{ fontSize:13, fontWeight:600 }}>📊 Class-wise Fee Collection</span>
+      <div style={{ ...dm.section, borderRadius:14 }}>
+        <div style={{ padding:'12px 18px', borderBottom:'0.5px solid '+dm.borderClr, display:'flex', justifyContent:'space-between' }}>
+          <span style={{ fontSize:13, fontWeight:600, color:dm.text }}>📊 Class-wise Fee Collection</span>
           <button onClick={() => navigate('/fees')} style={{ fontSize:11, color:'#7B6FD4', background:'none', border:'none', cursor:'pointer', fontWeight:600 }}>Full report →</button>
         </div>
         <div style={{ padding:'16px 20px' }}>
@@ -415,19 +455,19 @@ export default function Dashboard() {
                 const pct   = total > 0 ? Math.round((parseFloat(c.collected||0)/total)*100) : 0;
                 return (
                   <div key={c.class_name} style={{ display:'flex', alignItems:'center', gap:10, marginBottom:10 }}>
-                    <span style={{ fontSize:11, color:'#6B7280', width:80, flexShrink:0 }}>{c.class_name}</span>
-                    <div style={{ flex:1, height:16, background:'#F3F4F6', borderRadius:8, overflow:'hidden' }}>
+                    <span style={{ fontSize:11, color:dm.label, width:80, flexShrink:0 }}>{c.class_name}</span>
+                    <div style={{ flex:1, height:16, background:dm.progBg, borderRadius:8, overflow:'hidden' }}>
                       <div style={{ width:pct+'%', height:'100%', background:'linear-gradient(90deg,#7B6FD4,#A89DE8)', borderRadius:'8px 0 0 8px', minWidth:pct>0?4:0 }}/>
                     </div>
-                    <span style={{ fontSize:11, fontWeight:600, color:'#534AB7', width:36, textAlign:'right' }}>{pct}%</span>
-                    <span style={{ fontSize:10, color:'#6B7280', width:80, flexShrink:0 }}>₹{fmt(c.collected)} / ₹{fmt(total)}</span>
+                    <span style={{ fontSize:11, fontWeight:600, color:'#7B6FD4', width:36, textAlign:'right' }}>{pct}%</span>
+                    <span style={{ fontSize:10, color:dm.label, width:80, flexShrink:0 }}>₹{fmt(c.collected)} / ₹{fmt(total)}</span>
                   </div>
                 );
               })
           }
           <div style={{ display:'flex', gap:16, marginTop:10, fontSize:11, color:'#6B7280' }}>
-            <span><span style={{ display:'inline-block', width:10, height:10, background:'#7B6FD4', borderRadius:2, marginRight:4 }}/>Collected</span>
-            <span><span style={{ display:'inline-block', width:10, height:10, background:'#F3F4F6', borderRadius:2, marginRight:4, border:'1px solid #E5E7EB' }}/>Pending</span>
+            <span style={{color:dm.label}}><span style={{ display:'inline-block', width:10, height:10, background:'#7B6FD4', borderRadius:2, marginRight:4 }}/>Collected</span>
+            <span style={{color:dm.label}}><span style={{ display:'inline-block', width:10, height:10, background:dm.progBg, borderRadius:2, marginRight:4, border:'1px solid '+dm.actionBdr }}/>Pending</span>
           </div>
         </div>
       </div>
