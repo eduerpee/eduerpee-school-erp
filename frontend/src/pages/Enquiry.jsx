@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const STATUS_CFG = {
-  new:       { bg:'#DBEAFE', c:'#1E40AF', label:'🆕 New'       },
-  hot:       { bg:'#FEE2E2', c:'#991B1B', label:'🔥 Hot Lead'  },
-  warm:      { bg:'#FEF3C7', c:'#92400E', label:'🌡️ Warm Lead' },
-  cold:      { bg:'#F3F4F6', c:'#374151', label:'🧊 Cold Lead' },
-  converted: { bg:'#D1FAE5', c:'#065F46', label:'✅ Converted' },
+  new:       { bg:'#DBEAFE', c:'#1E40AF', label:'New',       icon:'ti-inbox',        grad:'linear-gradient(135deg,#1260A8,#55A8EE)' },
+  hot:       { bg:'#FEE2E2', c:'#991B1B', label:'Hot Lead',  icon:'ti-flame',        grad:'linear-gradient(135deg,#991B1B,#EF4444)' },
+  warm:      { bg:'#FEF3C7', c:'#92400E', label:'Warm Lead', icon:'ti-sun',          grad:'linear-gradient(135deg,#C17E10,#F0BF50)' },
+  cold:      { bg:'#F3F4F6', c:'#374151', label:'Cold Lead', icon:'ti-snowflake',    grad:'linear-gradient(135deg,#1E3A8A,#60A5FA)' },
+  converted: { bg:'#D1FAE5', c:'#065F46', label:'Converted', icon:'ti-circle-check', grad:'linear-gradient(135deg,#0E7A5F,#4DCBA6)' },
 };
 
 const SOURCES  = ['walk_in','phone','website','reference','social_media','newspaper'];
@@ -202,30 +202,59 @@ export default function Enquiry() {
               : <span style={{padding:'2px 8px',background:'#D1FAE5',color:'#065F46',borderRadius:10,fontSize:10,fontWeight:700}}>🟢 Live DB</span>}
           </p>
         </div>
-        <button onClick={()=>setShowAdd(true)} style={{padding:'9px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>+ New Enquiry</button>
+        <button onClick={()=>setShowAdd(true)} style={{display:'flex',alignItems:'center',gap:7,padding:'9px 20px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}>
+          <i className="ti ti-plus" style={{fontSize:16}}/> New Enquiry
+        </button>
       </div>
 
       {/* Pipeline */}
-      <div style={{display:'flex',alignItems:'center',gap:8,padding:'10px 14px',background:'#EDE9F8',borderRadius:10,marginBottom:14,fontSize:12,color:'#1E1B4B',fontWeight:600}}>
-        <span style={{fontWeight:800,textDecoration:'underline'}}>📞 Enquiry</span>
-        <span style={{color:'#A78BFA',fontSize:16}}>→</span><span>📄 Registration</span>
-        <span style={{color:'#A78BFA',fontSize:16}}>→</span><span>🎓 Admission</span>
-        <span style={{marginLeft:'auto',fontSize:11,fontWeight:500,color:'#6B52B0'}}>
-          Click "View" to edit or convert pending enquiries
-        </span>
+      <div style={{display:'flex',alignItems:'center',gap:10,padding:'10px 16px',background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:12,marginBottom:14}}>
+        <div style={{display:'flex',alignItems:'center',gap:7}}>
+          <div style={{width:28,height:28,background:'#EEEDFE',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}><i className="ti ti-help-circle" style={{fontSize:15,color:'#534AB7'}}/></div>
+          <span style={{fontSize:12,fontWeight:700,color:'#534AB7'}}>Enquiry</span>
+        </div>
+        <i className="ti ti-arrow-right" style={{color:'#D1D5DB',fontSize:16}}/>
+        <div style={{display:'flex',alignItems:'center',gap:7}}>
+          <div style={{width:28,height:28,background:'#E1F5EE',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}><i className="ti ti-file-text" style={{fontSize:15,color:'#0F6E56'}}/></div>
+          <span style={{fontSize:12,fontWeight:600,color:'#0F6E56'}}>Registration</span>
+        </div>
+        <i className="ti ti-arrow-right" style={{color:'#D1D5DB',fontSize:16}}/>
+        <div style={{display:'flex',alignItems:'center',gap:7}}>
+          <div style={{width:28,height:28,background:'#DBEAFE',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}><i className="ti ti-school" style={{fontSize:15,color:'#1E40AF'}}/></div>
+          <span style={{fontSize:12,fontWeight:600,color:'#1E40AF'}}>Admission</span>
+        </div>
+        <span style={{marginLeft:'auto',fontSize:11,color:'#9CA3AF'}}>Click "View" to edit or convert pending enquiries</span>
       </div>
 
-      {/* Status filter pills */}
-      <div style={{display:'flex',gap:8,marginBottom:14,flexWrap:'wrap',alignItems:'center'}}>
-        <input placeholder="🔍 Search name or phone…" value={search} onChange={e=>setSearch(e.target.value)}
-          style={{...inp,maxWidth:220,flex:1,padding:'8px 12px'}}/>
-        {Object.entries(STATUS_CFG).map(([key,{bg,c,label}]) => (
+      {/* Status Stat Cards — Option C */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:12,marginBottom:16}}>
+        {Object.entries(STATUS_CFG).map(([key,cfg]) => (
           <div key={key} onClick={()=>setFilter(filter===key?'':key)}
-            style={{padding:'6px 12px',borderRadius:20,background:filter===key?c:bg,color:filter===key?'#fff':c,fontSize:11,fontWeight:700,cursor:'pointer',border:'1.5px solid '+c+'33',userSelect:'none',transition:'all .15s'}}>
-            {label} ({counts[key]||0})
+            style={{borderRadius:14,overflow:'hidden',boxShadow:filter===key?'0 6px 20px rgba(0,0,0,0.15)':'0 2px 10px rgba(0,0,0,0.07)',background:'#fff',cursor:'pointer',transition:'all .18s',transform:filter===key?'translateY(-2px)':'none',outline:filter===key?'2px solid '+cfg.c:'none'}}>
+            <div style={{height:4,background:cfg.grad}}/>
+            <div style={{padding:'12px 14px',display:'flex',alignItems:'center',gap:12}}>
+              <div style={{width:44,height:44,borderRadius:11,background:cfg.grad,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                <i className={'ti '+cfg.icon} style={{fontSize:22,color:'white'}}/>
+              </div>
+              <div>
+                <div style={{fontSize:20,fontWeight:700,color:cfg.c,lineHeight:1}}>{counts[key]||0}</div>
+                <div style={{fontSize:11,color:'#6B7280',marginTop:2}}>{cfg.label}</div>
+              </div>
+            </div>
           </div>
         ))}
-        {filter && <button onClick={()=>setFilter('')} style={{padding:'6px 12px',borderRadius:20,background:'#F3F4F6',border:'1px solid #E5E7EB',fontSize:11,cursor:'pointer',color:'#6B7280'}}>Clear ✕</button>}
+      </div>
+
+      {/* Search + clear */}
+      <div style={{display:'flex',gap:8,marginBottom:14,alignItems:'center'}}>
+        <div style={{display:'flex',alignItems:'center',gap:8,background:'#fff',border:'1px solid #E5E7EB',borderRadius:10,padding:'8px 14px',flex:1,maxWidth:300}}>
+          <i className="ti ti-search" style={{fontSize:16,color:'#9CA3AF'}}/>
+          <input placeholder="Search name or phone…" value={search} onChange={e=>setSearch(e.target.value)}
+            style={{border:'none',outline:'none',fontSize:13,background:'transparent',width:'100%',fontFamily:'inherit'}}/>
+        </div>
+        {filter && <button onClick={()=>setFilter('')} style={{display:'flex',alignItems:'center',gap:5,padding:'8px 14px',borderRadius:10,background:'#F3F4F6',border:'1px solid #E5E7EB',fontSize:12,cursor:'pointer',color:'#6B7280',fontWeight:600}}>
+          <i className="ti ti-x" style={{fontSize:14}}/> Clear filter
+        </button>}
       </div>
 
       {/* Table */}
@@ -274,7 +303,9 @@ export default function Enquiry() {
                     }
                   </td>
                   <td style={{padding:'10px 12px'}}>
-                    <span style={{padding:'4px 10px',borderRadius:20,fontSize:11,fontWeight:700,background:st.bg,color:st.c}}>{st.label}</span>
+                    <span style={{display:'inline-flex',alignItems:'center',gap:5,padding:'4px 10px',borderRadius:20,fontSize:11,fontWeight:700,background:st.bg,color:st.c}}>
+                      <i className={'ti '+st.icon} style={{fontSize:12}}/>{st.label}
+                    </span>
                   </td>
                   <td style={{padding:'10px 12px'}}>
                     {canEdit
@@ -289,13 +320,13 @@ export default function Enquiry() {
                   <td style={{padding:'10px 12px'}}>
                     <div style={{display:'flex',gap:6}}>
                       <button onClick={()=>{setSelected(e);setEditMode(false);}}
-                        style={{padding:'5px 12px',border:'1px solid #1E1B4B',borderRadius:7,background:'#EDE9F8',color:'#1E1B4B',fontSize:11,fontWeight:600,cursor:'pointer'}}>
-                        View
+                        style={{display:'flex',alignItems:'center',gap:5,padding:'5px 12px',border:'1px solid #7B6FD4',borderRadius:7,background:'#EEEDFE',color:'#534AB7',fontSize:11,fontWeight:600,cursor:'pointer'}}>
+                        <i className="ti ti-eye" style={{fontSize:13}}/>View
                       </button>
                       {canEdit && (
                         <button onClick={()=>{setSelected(e);openEdit(e);}}
-                          style={{padding:'5px 12px',border:'1px solid #F59E0B',borderRadius:7,background:'#FEF3C7',color:'#92400E',fontSize:11,fontWeight:600,cursor:'pointer'}}>
-                          ✏️ Edit
+                          style={{display:'flex',alignItems:'center',gap:5,padding:'5px 12px',border:'1px solid #F59E0B',borderRadius:7,background:'#FEF3C7',color:'#92400E',fontSize:11,fontWeight:600,cursor:'pointer'}}>
+                          <i className="ti ti-edit" style={{fontSize:13}}/>Edit
                         </button>
                       )}
                     </div>
