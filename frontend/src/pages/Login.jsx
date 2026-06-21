@@ -223,16 +223,42 @@ export default function Login() {
             </form>
           </div>
 
-          <div style={{padding:'14px 16px',background:'#fff',borderRadius:12,border:'1px solid #E2E8F0',boxShadow:'0 1px 6px rgba(15,23,42,.04)'}}>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+          <div style={{background:'linear-gradient(135deg,#0F172A 0%,#1E293B 60%,#0F172A 100%)',borderRadius:12,padding:'14px 16px'}}>
+            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12,paddingBottom:10,borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="75 92 310 100" width="110" height="36">
+                  <circle cx="116" cy="136" r="35" fill="none" stroke="#1565C0" strokeWidth="1.5"/>
+                  <circle cx="116" cy="101" r="6" fill="#E8640A"/>
+                  <circle cx="151" cy="136" r="4" fill="#90CAF9"/>
+                  <circle cx="116" cy="136" r="26" fill="#E8640A"/>
+                  <rect x="108" y="124" width="4.5" height="23" rx="2" fill="white"/>
+                  <rect x="108" y="124" width="15" height="4.5" rx="2" fill="white"/>
+                  <rect x="108" y="132.5" width="11" height="3.5" rx="1.5" fill="rgba(255,255,255,0.65)"/>
+                  <rect x="108" y="142.5" width="15" height="4.5" rx="2" fill="white"/>
+                  <text x="165" y="125" fontFamily="sans-serif" fontSize="22" fontWeight="600" fill="white">Edu<tspan fill="#E8640A">Erpee</tspan></text>
+                  <text x="165" y="143" fontFamily="sans-serif" fontSize="10" fontWeight="600" fill="#F4975A" letterSpacing="1">Simplify · Automate · Grow</text>
+                </svg>
+              <div style={{borderLeft:'1px solid rgba(255,255,255,0.1)',paddingLeft:10}}>
+                <div style={{fontSize:11,fontWeight:800,color:'white',lineHeight:1.3}}>Eduerpee Technology Pvt. Ltd.</div>
+                <div style={{fontSize:9,color:'#64748B',marginTop:2,fontWeight:500}}>Azamgarh · Gr. Noida</div>
+              </div>
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:10}}>
               <div>
-                <p style={{fontSize:9,fontWeight:700,color:'#94A3B8',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:5}}>Registered Office</p>
-                <p style={{fontSize:10,color:'#475569',lineHeight:1.7,margin:0}}>519/216A, KATRA,<br/>Mubarak Pur, Azamgarh – Sadar,<br/>Uttar Pradesh – 276404, India</p>
+                <p style={{fontSize:8,fontWeight:700,color:'#E8640A',textTransform:'uppercase',letterSpacing:'1px',marginBottom:4}}>Registered Office</p>
+                <p style={{fontSize:10,color:'#CBD5E1',fontWeight:600,lineHeight:1.7,margin:0}}>519/216A, KATRA,<br/>Mubarak Pur, Azamgarh,<br/>UP – 276404, India</p>
               </div>
-              <div style={{borderLeft:'1px solid #F1F5F9',paddingLeft:12}}>
-                <p style={{fontSize:9,fontWeight:700,color:'#94A3B8',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:5}}>Branch Office</p>
-                <p style={{fontSize:10,color:'#475569',lineHeight:1.7,margin:0}}>Near Shiva Smart City-2,<br/>Talabpur Dadri, Gr. Noida,<br/>Uttar Pradesh – 203207, India</p>
+              <div style={{borderLeft:'1px solid rgba(255,255,255,0.08)',paddingLeft:10}}>
+                <p style={{fontSize:8,fontWeight:700,color:'#E8640A',textTransform:'uppercase',letterSpacing:'1px',marginBottom:4}}>Branch Office</p>
+                <p style={{fontSize:10,color:'#CBD5E1',fontWeight:600,lineHeight:1.7,margin:0}}>Near Shiva Smart City-2,<br/>Talabpur Dadri, Gr. Noida,<br/>UP – 203207, India</p>
               </div>
+            </div>
+            <div style={{display:'flex',gap:12,paddingTop:8,borderTop:'1px solid rgba(255,255,255,0.08)',flexWrap:'wrap'}}>
+              <a href="https://www.eduerpee.com" target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'#90CAF9',fontWeight:700,textDecoration:'none'}}>
+                <i className="ti ti-world" style={{fontSize:12}}/> www.eduerpee.com
+              </a>
+              <a href="mailto:support@eduerpee.com" style={{display:'flex',alignItems:'center',gap:4,fontSize:10,color:'#90CAF9',fontWeight:700,textDecoration:'none'}}>
+                <i className="ti ti-mail" style={{fontSize:12}}/> support@eduerpee.com
+              </a>
             </div>
           </div>
 
@@ -338,20 +364,45 @@ export default function Login() {
             </form>
           </div>
 
-          <div style={{padding:'16px 18px',background:'#fff',borderRadius:14,border:'1px solid #E2E8F0',boxShadow:'0 2px 8px rgba(15,23,42,.04)'}}>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
+          <div style={{background:'linear-gradient(135deg,#0F172A 0%,#1E293B 60%,#0F172A 100%)',borderRadius:14,padding:'18px 20px'}}>
+            {/* Logo + Company name */}
+            <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:14,paddingBottom:12,borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="75 92 310 100" width="140" height="45">
+                  <circle cx="116" cy="136" r="35" fill="none" stroke="#1565C0" strokeWidth="1.5"/>
+                  <circle cx="116" cy="101" r="6" fill="#E8640A"/>
+                  <circle cx="151" cy="136" r="4" fill="#90CAF9"/>
+                  <circle cx="116" cy="136" r="26" fill="#E8640A"/>
+                  <rect x="108" y="124" width="4.5" height="23" rx="2" fill="white"/>
+                  <rect x="108" y="124" width="15" height="4.5" rx="2" fill="white"/>
+                  <rect x="108" y="132.5" width="11" height="3.5" rx="1.5" fill="rgba(255,255,255,0.65)"/>
+                  <rect x="108" y="142.5" width="15" height="4.5" rx="2" fill="white"/>
+                  <text x="165" y="125" fontFamily="sans-serif" fontSize="22" fontWeight="600" fill="white">Edu<tspan fill="#E8640A">Erpee</tspan></text>
+                  <text x="165" y="143" fontFamily="sans-serif" fontSize="10" fontWeight="600" fill="#F4975A" letterSpacing="1">Simplify · Automate · Grow</text>
+                </svg>
+              <div style={{borderLeft:'1px solid rgba(255,255,255,0.1)',paddingLeft:12}}>
+                <div style={{fontSize:12,fontWeight:800,color:'white',lineHeight:1.3}}>Eduerpee Technology Pvt. Ltd.</div>
+                <div style={{fontSize:10,color:'#64748B',marginTop:2,fontWeight:500}}>Azamgarh · Gr. Noida</div>
+              </div>
+            </div>
+            {/* Offices */}
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:12}}>
               <div>
-                <p style={{fontSize:10,fontWeight:700,color:'#94A3B8',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:6}}>Registered Office</p>
-                <p style={{fontSize:11,color:'#475569',lineHeight:1.7,margin:0}}>
-                  519/216A, KATRA,<br/>Mubarak Pur, Azamgarh – Sadar,<br/>Uttar Pradesh – 276404,<br/>India
-                </p>
+                <p style={{fontSize:9,fontWeight:700,color:'#E8640A',textTransform:'uppercase',letterSpacing:'1px',marginBottom:5}}>Registered Office</p>
+                <p style={{fontSize:11,color:'#CBD5E1',fontWeight:600,lineHeight:1.8,margin:0}}>519/216A, KATRA,<br/>Mubarak Pur, Azamgarh – Sadar,<br/>Uttar Pradesh – 276404, India</p>
               </div>
-              <div style={{borderLeft:'1px solid #F1F5F9',paddingLeft:14}}>
-                <p style={{fontSize:10,fontWeight:700,color:'#94A3B8',textTransform:'uppercase',letterSpacing:'.08em',marginBottom:6}}>Branch Office</p>
-                <p style={{fontSize:11,color:'#475569',lineHeight:1.7,margin:0}}>
-                  Near Shiva Smart City-2,<br/>Talabpur Dadri, Gr. Noida,<br/>Uttar Pradesh – 203207,<br/>India
-                </p>
+              <div style={{borderLeft:'1px solid rgba(255,255,255,0.08)',paddingLeft:12}}>
+                <p style={{fontSize:9,fontWeight:700,color:'#E8640A',textTransform:'uppercase',letterSpacing:'1px',marginBottom:5}}>Branch Office</p>
+                <p style={{fontSize:11,color:'#CBD5E1',fontWeight:600,lineHeight:1.8,margin:0}}>Near Shiva Smart City-2,<br/>Talabpur Dadri, Gr. Noida,<br/>Uttar Pradesh – 203207, India</p>
               </div>
+            </div>
+            {/* Links */}
+            <div style={{display:'flex',gap:16,paddingTop:10,borderTop:'1px solid rgba(255,255,255,0.08)'}}>
+              <a href="https://www.eduerpee.com" target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:5,fontSize:11,color:'#90CAF9',fontWeight:700,textDecoration:'none'}}>
+                <i className="ti ti-world" style={{fontSize:13}}/> www.eduerpee.com
+              </a>
+              <a href="mailto:support@eduerpee.com" style={{display:'flex',alignItems:'center',gap:5,fontSize:11,color:'#90CAF9',fontWeight:700,textDecoration:'none'}}>
+                <i className="ti ti-mail" style={{fontSize:13}}/> support@eduerpee.com
+              </a>
             </div>
           </div>
           <p style={{textAlign:'center',marginTop:24,fontSize:11,color:'#CBD5E1'}}>
