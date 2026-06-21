@@ -292,9 +292,17 @@ export default function Login() {
         <div style={{width:60,height:3,borderRadius:99,background:`linear-gradient(90deg,transparent,${accent},transparent)`,margin:'0 0 14px'}}/>
         <p style={{fontSize:15,color:'rgba(255,255,255,.75)',textAlign:'center',lineHeight:1.6,margin:'0 0 48px',maxWidth:320}}>{tagline}</p>
         <div style={{display:'flex',flexWrap:'wrap',gap:10,justifyContent:'center',maxWidth:380}}>
-          {[['📚','Academics'],['💰','Fee Management'],['👥','Admissions'],['📊','Reports'],['🚌','Transport'],['🏆','Examinations']].map(([icon,label])=>(
+          {[
+            ['ti-books',      '#90CAF9', 'Academics'],
+            ['ti-credit-card','#F59E0B', 'Fee Management'],
+            ['ti-school',     '#86EFAC', 'Admissions'],
+            ['ti-chart-bar',  '#FDA4AF', 'Reports'],
+            ['ti-bus',        '#6EE7B7', 'Transport'],
+            ['ti-writing',    '#FCD34D', 'Examinations'],
+          ].map(([icon,color,label])=>(
             <div key={label} style={{padding:'7px 16px',background:'rgba(255,255,255,.1)',border:'1px solid rgba(255,255,255,.18)',borderRadius:100,fontSize:12,fontWeight:600,color:'rgba(255,255,255,.85)',display:'flex',alignItems:'center',gap:6,backdropFilter:'blur(4px)'}}>
-              <span>{icon}</span>{label}
+              <i className={'ti '+icon} style={{fontSize:15,color:color}}/>
+              {label}
             </div>
           ))}
         </div>
@@ -315,7 +323,7 @@ export default function Login() {
               <span style={{fontSize:11,fontWeight:700,color:primary,textTransform:'uppercase',letterSpacing:'.1em'}}>School Management System</span>
             </div>
             <h2 style={{fontSize:30,fontWeight:800,color:'#0F172A',margin:'0 0 8px',letterSpacing:'-.02em'}}>Welcome Back</h2>
-            <p style={{fontSize:14,color:'#64748B',margin:0}}>Sign in to access the admin portal</p>
+            
           </div>
 
           {error && (
