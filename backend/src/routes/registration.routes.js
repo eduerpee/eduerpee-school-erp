@@ -1,10 +1,13 @@
 const express = require('express');
 const router  = express.Router();
-const { getRegistrations, createRegistration, updateRegistration, convertToStudent } = require('../controllers/registration.controller');
+const ctrl    = require('../controllers/registration.controller');
 const { authenticate } = require('../middleware/auth.middleware');
+
 router.use(authenticate);
-router.get('/',             getRegistrations);
-router.post('/',            createRegistration);
-router.put('/:id',          updateRegistration);
-router.post('/:id/convert', convertToStudent);
+router.get('/',              ctrl.getRegistrations);
+router.post('/',             ctrl.createRegistration);
+router.put('/:id',           ctrl.updateRegistration);
+router.delete('/:id',        ctrl.deleteRegistration);
+router.post('/:id/convert',  ctrl.convertToStudent);
+
 module.exports = router;

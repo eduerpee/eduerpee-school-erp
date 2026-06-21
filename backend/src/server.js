@@ -1,57 +1,76 @@
-require('dotenv').config();
-require('express-async-errors');
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
 
-const express = require('express');
-const cors    = require('cors');
-const helmet  = require('helmet');
-const morgan  = require('morgan');
-const compression  = require('compression');
-const rateLimit    = require('express-rate-limit');
-const { logger }   = require('./utils/logger');
+const express    = require('express');
+const cors       = require('cors');
+const helmet     = require('helmet');
+const morgan     = require('morgan');
+require('dotenv').config();
 
 const app = express();
 
-// ── CORS — allow all localhost ports ──────────────────────
-app.use(cors({ origin:(origin,cb)=>cb(null,true), credentials:true, methods:['GET','POST','PUT','DELETE','PATCH','OPTIONS'], allowedHeaders:['Content-Type','Authorization'] }));
-app.options('*', cors());
-app.use(helmet({ crossOriginResourcePolicy:false }));
-
-const limiter     = rateLimit({ windowMs:15*60*1000, max:1000 });
-const authLimiter = rateLimit({ windowMs:15*60*1000, max:100  });
-app.use('/api/', limiter);
-app.use(compression());
+// ── Middleware ─────────────────────────────────────────────────
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use(cors({ origin: '*', credentials: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-app.use(express.json({ limit:'10mb' }));
-app.use(express.urlencoded({ extended:true, limit:'10mb' }));
 
-app.get('/api/health', (req,res) => res.json({ status:'OK', timestamp:new Date().toISOString(), version:'1.0.0' }));
+// ── School + Auth middleware ───────────────────────────────────
+const { authenticate } = require('./middleware/auth.middleware');
 
-app.use('/api/auth',          authLimiter, require('./routes/auth.routes'));
+// Inject schoolId into every request
+app.use((req, res, next) => {
+  req.schoolId = process.env.SCHOOL_ID || 'a0000000-0000-0000-0000-000000000001';
+  next();
+});
+
+// ── Health check ───────────────────────────────────────────────
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// ── Routes ────────────────────────────────────────────────────
+app.use('/api/auth',          require('./routes/auth.routes'));
 app.use('/api/schools',       require('./routes/school.routes'));
 app.use('/api/dashboard',     require('./routes/dashboard.routes'));
-app.use('/api/students',      require('./routes/student.routes'));
-app.use('/api/employees',     require('./routes/employee.routes'));
-app.use('/api/attendance',    require('./routes/attendance.routes'));
-app.use('/api/fees',          require('./routes/fee.routes'));
-app.use('/api/exams',         require('./routes/exam.routes'));
 app.use('/api/enquiries',     require('./routes/enquiry.routes'));
 app.use('/api/registrations', require('./routes/registration.routes'));
-app.use('/api/rooms',    require('./routes/room.routes'));
-app.use('/api/tc',       require('./routes/tc.routes'));
-app.use('/api/notices',       require('./routes/notice.routes'));
-app.use('/api/reports',       require('./routes/report.routes'));
+app.use('/api/students',      require('./routes/student.routes'));
+app.use('/api/attendance',    require('./routes/attendance.routes'));
+app.use('/api/exams',         require('./routes/exam.routes'));
 app.use('/api/timetable',     require('./routes/timetable.routes'));
+app.use('/api/fees',          require('./routes/fee.routes'));
+app.use('/api/expenses',      require('./routes/expense.routes'));
+app.use('/api/employees',     require('./routes/employee.routes'));
 app.use('/api/transport',     require('./routes/transport.routes'));
 app.use('/api/library',       require('./routes/library.routes'));
-app.use('/api/expenses',      require('./routes/expense.routes'));
-app.use('/api/payroll',       require('./routes/payroll.routes'));
+app.use('/api/notices',       require('./routes/notice.routes'));
+app.use('/api/rooms',         require('./routes/room.routes'));
+app.use('/api/tc',            require('./routes/tc.routes'));
+app.use('/api/reports',       require('./routes/report.routes'));
 
-app.use(require('./middleware/notFound.middleware').notFound);
-app.use(require('./middleware/error.middleware').errorHandler);
+// ── Global error handler ──────────────────────────────────────
+app.use((err, req, res, next) => {
+  console.error('Error:', err.message);
+  const status = err.statusCode || err.status || 500;
+  res.status(status).json({
+    success: false,
+    message: err.message || 'Internal server error',
+  });
+});
 
+// ── 404 handler ───────────────────────────────────────────────
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` });
+});
+
+// ── Start server ──────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`\n🚀 EduManage API → http://localhost:${PORT}`);
-  console.log(`   DB: ${process.env.DB_USER}@${process.env.DB_HOST}/${process.env.DB_NAME}\n`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`   School ID  : ${process.env.SCHOOL_ID || 'a0000000-0000-0000-0000-000000000001'}`);
 });
+
 module.exports = app;
