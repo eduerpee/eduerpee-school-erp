@@ -93,7 +93,11 @@ const getStudentsForClass = async (req, res) => {
 const saveMarks = async (req, res) => {
   const { marks } = req.body;
   if (!marks?.length) throw new AppError('No marks provided', 400);
-  await db.transaction(async (client) => {
+
+  const client = await db.getPool().connect();
+  try {
+    await client.query('BEGIN');
+
     for (const m of marks) {
       const grade = calcGrade(m.marksObtained, m.maxMarks);
       await client.query(
@@ -107,7 +111,15 @@ const saveMarks = async (req, res) => {
          m.isAbsent||false, m.isAbsent?'AB':grade, req.user?.id||null]
       );
     }
-  });
+
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+
   res.json({ success:true, message: marks.length + ' marks saved' });
 };
 

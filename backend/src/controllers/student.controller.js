@@ -135,7 +135,10 @@ const createStudent = async (req, res) => {
 
   const admissionNo = await generateAdmissionNo(req.schoolId);
 
-  await db.transaction(async (client) => {
+  const client = await db.getPool().connect();
+  try {
+    await client.query('BEGIN');
+
     const studentRow = await client.query(
       `INSERT INTO students
          (school_id, admission_no, first_name, last_name, date_of_birth,
@@ -164,12 +167,19 @@ const createStudent = async (req, res) => {
       }
     }
 
+    await client.query('COMMIT');
+
     res.status(201).json({
       success: true,
       data: studentRow.rows[0],
       message: 'Student admitted. Admission No: ' + admissionNo
     });
-  });
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
 };
 
 // PUT /api/students/:id

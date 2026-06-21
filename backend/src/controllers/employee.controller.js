@@ -58,11 +58,16 @@ const createEmployee = async (req, res) => {
   if (!firstName?.trim()) throw new AppError('First name required', 400);
   if (!phone?.trim())     throw new AppError('Phone required', 400);
   if (!employeeType)      throw new AppError('Employee type required', 400);
+
   const dbType = mapType(employeeType);
   const empId  = await generateEmployeeId(req.schoolId);
   const today  = new Date().toISOString().split('T')[0];
+
   let created;
-  await db.transaction(async (client) => {
+  const client = await db.getPool().connect();
+  try {
+    await client.query('BEGIN');
+
     const r = await client.query(
       `INSERT INTO employees (school_id,employee_id,first_name,last_name,employee_type,department,designation,phone,email,joining_date,qualification,aadhaar_no,pan_no,address,is_active)
        VALUES ($1,$2,$3,$4,$5::employee_type,$6,$7,$8,$9,$10,$11,$12,$13,$14,TRUE)
@@ -72,18 +77,28 @@ const createEmployee = async (req, res) => {
        joiningDate||today, qualification||null, aadhaarNo||null, panNo||null, address||null]
     );
     created = r.rows[0];
+
     const sal = parseFloat(basicSalary)||0;
-    if (sal>0) await client.query(
-      `INSERT INTO salary_structures (school_id,employee_id,basic_salary,effective_from) VALUES ($1,$2,$3,$4::date)`,
-      [req.schoolId, created.id, sal, today]
-    );
-  });
-  res.status(201).json({ success:true, data:{...created,basic_salary:parseFloat(basicSalary)||0}, message:'Employee '+empId+' saved ✅' });
+    if (sal > 0) {
+      await client.query(
+        `INSERT INTO salary_structures (school_id,employee_id,basic_salary,effective_from) VALUES ($1,$2,$3,$4::date)`,
+        [req.schoolId, created.id, sal, today]
+      );
+    }
+
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+
+  res.status(201).json({ success:true, data:{...created, basic_salary:parseFloat(basicSalary)||0}, message:'Employee '+empId+' saved ✅' });
 };
 
 const updateEmployee = async (req, res) => {
   const { firstName, lastName, department, designation, phone, email, isActive, basicSalary, qualification } = req.body;
-  // CALL procedure for DML
   await db.query('CALL update_employee_record($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
     [req.params.id, req.schoolId, firstName||null, lastName||null,
      department||null, designation||null, phone||null, email||null,
