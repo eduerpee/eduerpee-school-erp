@@ -136,24 +136,27 @@ export default function RoomAllocation() {
           </p>
         </div>
         <button onClick={()=>{setEditRoom(null);setForm({roomNo:'',roomName:'',floor:'',capacity:'40',roomType:'classroom'});setShowAdd(true);}}
-          style={{padding:'10px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:10,fontSize:13,fontWeight:700,cursor:'pointer'}}>
-          + Add Room
+          style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}>
+          <i className="ti ti-plus" style={{fontSize:16}}/> Add Room
         </button>
       </div>
 
       {/* Filters */}
       <div style={{display:'flex',gap:10,marginBottom:16,flexWrap:'wrap',alignItems:'center'}}>
-        <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Search room, class…"
-          style={{...inp,width:220,display:'inline-block'}}/>
+        <div style={{display:'flex',alignItems:'center',gap:8,background:'#fff',border:'1px solid #E5E7EB',borderRadius:10,padding:'8px 14px',width:240}}>
+          <i className="ti ti-search" style={{fontSize:16,color:'#9CA3AF'}}/>
+          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search room, class…"
+            style={{border:'none',outline:'none',fontSize:13,background:'transparent',width:'100%',fontFamily:'inherit'}}/>
+        </div>
         <div style={{display:'flex',gap:6}}>
           <button onClick={()=>setFilterType('')}
-            style={{padding:'7px 14px',borderRadius:20,border:'1.5px solid '+(filterType===''?'#1E1B4B':'#E5E7EB'),background:filterType===''?'#1E1B4B':'#fff',color:filterType===''?'#fff':'#374151',fontSize:12,fontWeight:600,cursor:'pointer'}}>
-            All
+            style={{display:'flex',alignItems:'center',gap:5,padding:'7px 14px',borderRadius:20,border:'none',background:filterType===''?'linear-gradient(135deg,#7B6FD4,#534AB7)':'#fff',color:filterType===''?'#fff':'#374151',fontSize:12,fontWeight:600,cursor:'pointer',boxShadow:filterType===''?'0 3px 8px rgba(123,111,212,0.35)':'0 1px 3px rgba(0,0,0,0.06)',outline:filterType!==''?'1px solid #E5E7EB':'none'}}>
+            <i className="ti ti-layout-grid" style={{fontSize:13}}/> All
           </button>
           {ROOM_TYPES.map(t=>(
             <button key={t} onClick={()=>setFilterType(filterType===t?'':t)}
-              style={{padding:'7px 14px',borderRadius:20,border:'1.5px solid '+(filterType===t?'#1E1B4B':'#E5E7EB'),background:filterType===t?'#1E1B4B':'#fff',color:filterType===t?'#fff':'#374151',fontSize:12,fontWeight:600,cursor:'pointer',textTransform:'capitalize'}}>
-              {TYPE_ICONS[t]} {t}
+              style={{display:'flex',alignItems:'center',gap:5,padding:'7px 14px',borderRadius:20,border:'none',background:filterType===t?'linear-gradient(135deg,#7B6FD4,#534AB7)':'#fff',color:filterType===t?'#fff':'#374151',fontSize:12,fontWeight:600,cursor:'pointer',boxShadow:filterType===t?'0 3px 8px rgba(123,111,212,0.35)':'0 1px 3px rgba(0,0,0,0.06)',outline:filterType!==t?'1px solid #E5E7EB':'none',textTransform:'capitalize'}}>
+              <i className={'ti '+TYPE_ICONS[t]} style={{fontSize:13,color:filterType===t?'white':undefined}}/> {t}
             </button>
           ))}
         </div>
@@ -163,16 +166,24 @@ export default function RoomAllocation() {
         ? <div style={{padding:48,textAlign:'center',color:'#9CA3AF'}}>⏳ Loading rooms…</div>
         : <>
             {/* Summary stats */}
-            <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:20}}>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:14,marginBottom:20}}>
               {[
-                { label:'Total Rooms',   value:rooms.length,                          bg:'#EDE9F8',c:'#4C1D95' },
-                { label:'Allocated',     value:rooms.filter(r=>r.class_name).length,  bg:'#D1FAE5',c:'#065F46' },
-                { label:'Available',     value:rooms.filter(r=>!r.class_name).length, bg:'#FEF3C7',c:'#92400E' },
-                { label:'Total Capacity',value:rooms.reduce((s,r)=>s+(r.capacity||0),0)+'seats', bg:'#DBEAFE',c:'#1E40AF' },
+                { label:'Total Rooms',    value:rooms.length,                                              icon:'ti-building',  grad:'linear-gradient(135deg,#7B6FD4,#C4BAF2)', c:'#534AB7' },
+                { label:'Allocated',      value:rooms.filter(r=>r.class_name).length,                     icon:'ti-circle-check',grad:'linear-gradient(135deg,#0E7A5F,#4DCBA6)',c:'#0F6E56' },
+                { label:'Available',      value:rooms.filter(r=>!r.class_name).length,                    icon:'ti-door',      grad:'linear-gradient(135deg,#C17E10,#F0BF50)', c:'#BA7517' },
+                { label:'Total Seats',    value:rooms.reduce((s,r)=>s+(r.capacity||0),0),                 icon:'ti-armchair',  grad:'linear-gradient(135deg,#1260A8,#55A8EE)', c:'#185FA5' },
               ].map(s=>(
-                <div key={s.label} style={{background:s.bg,borderRadius:12,padding:'14px 16px',textAlign:'center'}}>
-                  <div style={{fontSize:22,fontWeight:800,color:s.c}}>{s.value}</div>
-                  <div style={{fontSize:11,color:s.c,marginTop:2,opacity:.8}}>{s.label}</div>
+                <div key={s.label} style={{borderRadius:16,overflow:'hidden',boxShadow:'0 2px 14px rgba(0,0,0,0.08)',background:'#fff'}}>
+                  <div style={{height:4,background:s.grad}}/>
+                  <div style={{padding:'12px 14px',display:'flex',alignItems:'center',gap:12}}>
+                    <div style={{width:44,height:44,borderRadius:11,background:s.grad,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                      <i className={'ti '+s.icon} style={{fontSize:22,color:'white'}}/>
+                    </div>
+                    <div>
+                      <div style={{fontSize:20,fontWeight:700,color:s.c,lineHeight:1}}>{s.value}</div>
+                      <div style={{fontSize:11,color:'#6B7280',marginTop:2}}>{s.label}</div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -180,40 +191,43 @@ export default function RoomAllocation() {
             {/* Allocated Rooms */}
             {allocated.length > 0 && (
               <div style={{marginBottom:24}}>
-                <div style={{fontWeight:700,fontSize:14,color:'#111827',marginBottom:10,display:'flex',alignItems:'center',gap:8}}>
-                  <span style={{padding:'3px 10px',background:'#D1FAE5',color:'#065F46',borderRadius:20,fontSize:11}}>✅ Allocated ({allocated.length})</span>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:12}}>
+                  <div style={{width:28,height:28,background:'#D1FAE5',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                    <i className="ti ti-circle-check" style={{fontSize:15,color:'#065F46'}}/>
+                  </div>
+                  <span style={{fontSize:13,fontWeight:700,color:'#111827'}}>Allocated</span>
+                  <span style={{background:'#D1FAE5',color:'#065F46',padding:'2px 9px',borderRadius:20,fontSize:11,fontWeight:700}}>{allocated.length}</span>
                 </div>
                 <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12}}>
                   {allocated.map(room => {
                     const [bg,col] = TYPE_COLORS[room.room_type]||TYPE_COLORS.classroom;
                     return (
-                      <div key={room.id} style={{background:'#fff',border:'1.5px solid #E5E7EB',borderRadius:14,overflow:'hidden',boxShadow:'0 1px 4px rgba(0,0,0,.06)'}}>
-                        <div style={{background:bg,padding:'12px 16px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                          <div>
-                            <span style={{fontSize:20}}>{TYPE_ICONS[room.room_type]||'🏫'}</span>
-                            <span style={{marginLeft:8,fontWeight:800,fontSize:15,color:col}}>{room.room_no}</span>
-                          </div>
-                          <span style={{fontSize:10,fontWeight:700,color:col,background:'rgba(255,255,255,.6)',padding:'2px 8px',borderRadius:10,textTransform:'capitalize'}}>{room.room_type}</span>
+                      <div key={room.id} style={{borderRadius:16,overflow:'hidden',boxShadow:'0 2px 14px rgba(0,0,0,0.08)',background:'#fff'}}>
+                        <div style={{background:TYPE_GRADS[room.room_type]||TYPE_GRADS.classroom,height:70,display:'flex',alignItems:'center',justifyContent:'center',position:'relative'}}>
+                          <i className={'ti '+(TYPE_ICONS[room.room_type]||'ti-school')} style={{fontSize:36,color:'white',opacity:0.9}}/>
+                          <span style={{position:'absolute',top:9,left:12,color:'white',fontSize:15,fontWeight:800}}>{room.room_no}</span>
+                          <span style={{position:'absolute',top:9,right:10,background:'rgba(255,255,255,0.25)',color:'white',padding:'2px 9px',borderRadius:20,fontSize:10,fontWeight:700,textTransform:'capitalize'}}>{room.room_type}</span>
                         </div>
                         <div style={{padding:'10px 14px'}}>
-                          {room.room_name && <div style={{fontWeight:600,fontSize:13,color:'#111827',marginBottom:4}}>{room.room_name}</div>}
-                          <div style={{fontSize:11,color:'#6B7280',marginBottom:2}}>{room.floor||'—'}</div>
-                          <div style={{fontSize:11,color:'#6B7280',marginBottom:8}}>Capacity: {room.capacity} seats</div>
-                          <div style={{padding:'8px 10px',background:'#D1FAE5',borderRadius:8,marginBottom:10}}>
-                            <div style={{fontWeight:700,color:'#065F46',fontSize:12}}>📚 {room.class_name} {room.section_name?`— Section ${room.section_name}`:''}</div>
+                          {room.room_name && <div style={{fontWeight:700,fontSize:13,color:'#111827',marginBottom:2}}>{room.room_name}</div>}
+                          <div style={{fontSize:11,color:'#9CA3AF',marginBottom:1}}>{room.floor||'—'}</div>
+                          <div style={{fontSize:11,color:'#9CA3AF',marginBottom:9,display:'flex',alignItems:'center',gap:4}}><i className="ti ti-armchair" style={{fontSize:12}}/>{room.capacity} seats</div>
+                          <div style={{padding:'7px 10px',background:'#D1FAE5',borderRadius:8,marginBottom:9,display:'flex',alignItems:'center',gap:6}}>
+                            <i className="ti ti-school" style={{fontSize:13,color:'#065F46'}}/>
+                            <span style={{fontWeight:700,color:'#065F46',fontSize:12}}>{room.class_name}{room.section_name?` — Section ${room.section_name}`:''}</span>
                           </div>
                           <div style={{display:'flex',gap:6}}>
                             <button onClick={()=>{setAllocRoom(room);setAllocForm({classId:room.class_id||'',sectionId:room.section_id||'',});}}
-                              style={{flex:1,padding:'6px',border:'1px solid #E5E7EB',borderRadius:7,background:'#FEF3C7',color:'#92400E',fontSize:11,fontWeight:600,cursor:'pointer'}}>
-                              🔄 Reallocate
+                              style={{flex:1,padding:'6px',border:'1px solid #FEF3C7',borderRadius:8,background:'#FEF3C7',color:'#92400E',fontSize:11,fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:5}}>
+                              <i className="ti ti-refresh" style={{fontSize:13}}/> Reallocate
                             </button>
                             <button onClick={()=>handleDeallocate(room)}
-                              style={{padding:'6px 10px',border:'1px solid #FEE2E2',borderRadius:7,background:'#FFF5F5',color:'#DC2626',fontSize:11,cursor:'pointer'}}>
-                              ✕
+                              style={{padding:'6px 10px',border:'1px solid #FEE2E2',borderRadius:8,background:'#FFF5F5',color:'#DC2626',fontSize:11,cursor:'pointer'}}>
+                              <i className="ti ti-x" style={{fontSize:13}}/>
                             </button>
                             <button onClick={()=>openEdit(room)}
-                              style={{padding:'6px 10px',border:'1px solid #E5E7EB',borderRadius:7,background:'#F9FAFB',fontSize:11,cursor:'pointer'}}>
-                              ✏️
+                              style={{padding:'6px 10px',border:'1px solid #E5E7EB',borderRadius:8,background:'#F9FAFB',fontSize:11,cursor:'pointer'}}>
+                              <i className="ti ti-edit" style={{fontSize:13,color:'#6B7280'}}/>
                             </button>
                           </div>
                         </div>
@@ -227,27 +241,29 @@ export default function RoomAllocation() {
             {/* Available Rooms */}
             {unallocated.length > 0 && (
               <div>
-                <div style={{fontWeight:700,fontSize:14,color:'#111827',marginBottom:10,display:'flex',alignItems:'center',gap:8}}>
-                  <span style={{padding:'3px 10px',background:'#FEF3C7',color:'#92400E',borderRadius:20,fontSize:11}}>⬜ Available ({unallocated.length})</span>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:12}}>
+                  <div style={{width:28,height:28,background:'#FEF3C7',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                    <i className="ti ti-door" style={{fontSize:15,color:'#92400E'}}/>
+                  </div>
+                  <span style={{fontSize:13,fontWeight:700,color:'#111827'}}>Available</span>
+                  <span style={{background:'#FEF3C7',color:'#92400E',padding:'2px 9px',borderRadius:20,fontSize:11,fontWeight:700}}>{unallocated.length}</span>
                 </div>
                 <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12}}>
                   {unallocated.map(room => {
                     const [bg,col] = TYPE_COLORS[room.room_type]||TYPE_COLORS.classroom;
                     return (
-                      <div key={room.id} style={{background:'#fff',border:'1.5px dashed #D1D5DB',borderRadius:14,overflow:'hidden'}}>
-                        <div style={{background:bg,padding:'12px 16px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                          <div>
-                            <span style={{fontSize:20}}>{TYPE_ICONS[room.room_type]||'🏫'}</span>
-                            <span style={{marginLeft:8,fontWeight:800,fontSize:15,color:col}}>{room.room_no}</span>
-                          </div>
-                          <span style={{fontSize:10,fontWeight:700,color:col,background:'rgba(255,255,255,.6)',padding:'2px 8px',borderRadius:10,textTransform:'capitalize'}}>{room.room_type}</span>
+                      <div key={room.id} style={{borderRadius:16,overflow:'hidden',boxShadow:'0 1px 8px rgba(0,0,0,0.05)',background:'#fff',border:'1.5px dashed #D1D5DB'}}>
+                        <div style={{background:TYPE_GRADS[room.room_type]||TYPE_GRADS.classroom,height:70,display:'flex',alignItems:'center',justifyContent:'center',position:'relative',opacity:0.88}}>
+                          <i className={'ti '+(TYPE_ICONS[room.room_type]||'ti-school')} style={{fontSize:36,color:'white',opacity:0.9}}/>
+                          <span style={{position:'absolute',top:9,left:12,color:'white',fontSize:15,fontWeight:800}}>{room.room_no}</span>
+                          <span style={{position:'absolute',top:9,right:10,background:'rgba(255,255,255,0.25)',color:'white',padding:'2px 9px',borderRadius:20,fontSize:10,fontWeight:700,textTransform:'capitalize'}}>{room.room_type}</span>
                         </div>
                         <div style={{padding:'10px 14px'}}>
-                          {room.room_name && <div style={{fontWeight:600,fontSize:13,color:'#111827',marginBottom:4}}>{room.room_name}</div>}
-                          <div style={{fontSize:11,color:'#6B7280',marginBottom:2}}>{room.floor||'—'}</div>
-                          <div style={{fontSize:11,color:'#6B7280',marginBottom:8}}>Capacity: {room.capacity} seats</div>
-                          <div style={{padding:'6px 10px',background:'#F9FAFB',borderRadius:8,marginBottom:10,fontSize:11,color:'#9CA3AF',textAlign:'center'}}>
-                            Not allocated
+                          {room.room_name && <div style={{fontWeight:700,fontSize:13,color:'#111827',marginBottom:2}}>{room.room_name}</div>}
+                          <div style={{fontSize:11,color:'#9CA3AF',marginBottom:1}}>{room.floor||'—'}</div>
+                          <div style={{fontSize:11,color:'#9CA3AF',marginBottom:9,display:'flex',alignItems:'center',gap:4}}><i className="ti ti-armchair" style={{fontSize:12}}/>{room.capacity} seats</div>
+                          <div style={{padding:'6px 10px',background:'#F9FAFB',border:'1px dashed #E5E7EB',borderRadius:8,marginBottom:9,textAlign:'center',display:'flex',alignItems:'center',justifyContent:'center',gap:5}}>
+                            <i className="ti ti-clock" style={{fontSize:12,color:'#9CA3AF'}}/><span style={{fontSize:11,color:'#9CA3AF'}}>Not Allocated</span>
                           </div>
                           <div style={{display:'flex',gap:6}}>
                             <button onClick={()=>{setAllocRoom(room);setAllocForm({classId:'',sectionId:'',});}}

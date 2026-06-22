@@ -246,8 +246,8 @@ export default function Registration() {
           </p>
         </div>
         <div style={{display:'flex',gap:10}}>
-          <button onClick={() => setShowAddCls(true)} style={{padding:'9px 14px',border:'1.5px solid #1E1B4B',borderRadius:9,background:'#EDE9F8',color:'#1E1B4B',fontSize:12,fontWeight:700,cursor:'pointer'}}>+ Add Class</button>
-          <button onClick={() => setShowAdd(true)}    style={{padding:'9px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>+ New Registration</button>
+          <button onClick={() => setShowAddCls(true)} style={{padding:'9px 14px',border:'1.5px solid #1E1B4B',borderRadius:9,background:'#EDE9F8',color:'#1E1B4B',fontSize:12,fontWeight:700,cursor:'pointer'}}><><i className="ti ti-plus" style={{fontSize:14}}/> Add Class</></button>
+          <button onClick={() => setShowAdd(true)}    style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}><><i className="ti ti-plus" style={{fontSize:16}}/> New Registration</></button>
         </div>
       </div>
 
@@ -355,7 +355,8 @@ export default function Registration() {
           <div style={{background:'#fff',borderRadius:18,width:460,overflow:'hidden'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
               <div style={{fontWeight:700,fontSize:15}}>🎓 Confirm Admission</div>
-              <button onClick={() => setConverting(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={() => setConverting(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <div style={{padding:22}}>
               <div style={{display:'flex',gap:14,padding:14,background:'#EDE9F8',borderRadius:12,marginBottom:14,alignItems:'center'}}>
@@ -396,7 +397,8 @@ export default function Registration() {
                 <div style={{fontWeight:700,fontSize:15}}>✏️ Edit Registration — {editReg.registration_no}</div>
                 <div style={{fontSize:11,color:'#92400E',marginTop:2}}>⚠️ Only pending registrations can be edited</div>
               </div>
-              <button onClick={() => setEditReg(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={() => setEditReg(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <div style={{padding:20}}>
               {/* Photo upload section */}
@@ -448,7 +450,7 @@ export default function Registration() {
                 <button onClick={() => setEditReg(null)} style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
                 <button onClick={handleSaveEdit} disabled={editSaving}
                   style={{padding:'10px 22px',background:editSaving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:editSaving?'not-allowed':'pointer'}}>
-                  {editSaving ? '⏳ Saving…' : '💾 Save Changes'}
+                  {editSaving ? 'Saving…' : 'Save Changes'}
                 </button>
               </div>
             </div>
@@ -462,7 +464,8 @@ export default function Registration() {
           <div style={{background:'#fff',borderRadius:18,width:440,overflow:'hidden'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
               <div style={{fontWeight:700,fontSize:15}}>+ Add New Class</div>
-              <button onClick={() => setShowAddCls(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={() => setShowAddCls(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <div style={{padding:20}}>
               <div style={{marginBottom:12}}>
@@ -477,7 +480,7 @@ export default function Registration() {
               </div>
               <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
                 <button onClick={() => setShowAddCls(false)} style={{padding:'9px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
-                <button onClick={handleAddClass} style={{padding:'9px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>+ Add Class</button>
+                <button onClick={handleAddClass} style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}><><i className="ti ti-plus" style={{fontSize:14}}/> Add Class</></button>
               </div>
             </div>
           </div>
@@ -490,7 +493,8 @@ export default function Registration() {
           <div style={{background:'#fff',borderRadius:18,width:640,maxWidth:'100%',maxHeight:'92vh',overflow:'auto'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center',position:'sticky',top:0,background:'#fff',zIndex:1}}>
               <div style={{fontWeight:700,fontSize:15}}>📄 New Registration</div>
-              <button onClick={() => { setShowAdd(false); setPhoto(null); }} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={() => { setShowAdd(false); setPhoto(null); }} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <form onSubmit={handleAdd} style={{padding:20}}>
               {/* Photo + basic info */}
@@ -548,7 +552,7 @@ export default function Registration() {
               <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
                 <button type="button" onClick={() => { setShowAdd(false); setPhoto(null); }} style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
                 <button type="submit" disabled={saving} style={{padding:'10px 22px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer'}}>
-                  {saving ? '⏳ Saving…' : '💾 Save Registration'}
+                  {saving ? 'Saving…' : 'Save Registration'}
                 </button>
               </div>
             </form>
@@ -562,7 +566,8 @@ export default function Registration() {
           <div style={{background:'#fff',borderRadius:18,width:460,overflow:'hidden'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
               <div style={{fontWeight:700,fontSize:15}}>💰 Confirm Admission Fee</div>
-              <button onClick={()=>setConfirmingFee(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>setConfirmingFee(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <div style={{padding:20}}>
               <div style={{padding:'14px',background:'#EDE9F8',borderRadius:10,marginBottom:16}}>

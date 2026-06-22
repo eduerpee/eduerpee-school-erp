@@ -210,14 +210,14 @@ export default function TransferCertificate() {
           </p>
         </div>
         <button onClick={()=>setShowForm(true)}
-          style={{padding:'10px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:10,fontSize:13,fontWeight:700,cursor:'pointer'}}>
+          style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}>
           + Issue TC
         </button>
       </div>
 
       {/* Search */}
       <input value={search} onChange={e=>setSearch(e.target.value)}
-        placeholder="🔍 Search by TC No., student name, class…"
+        placeholder="Search by TC No., student name, class…"
         style={{...inp,width:340,marginBottom:16}}/>
 
       {/* TC List */}
@@ -304,7 +304,8 @@ export default function TransferCertificate() {
           <div style={{background:'#fff',borderRadius:18,width:580,maxHeight:'92vh',overflow:'auto'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center',position:'sticky',top:0,background:'#fff',zIndex:1}}>
               <div style={{fontWeight:700,fontSize:15}}>📄 Issue Transfer Certificate</div>
-              <button onClick={()=>{setShowForm(false);setSelStu(null);setStuSearch('');}} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>{setShowForm(false);setSelStu(null);setStuSearch('');}} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <form onSubmit={handleSubmit} style={{padding:20}}>
               {/* Student Search */}

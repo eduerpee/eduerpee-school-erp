@@ -117,7 +117,7 @@ export default function Library() {
             <span style={{padding:'2px 8px',background:'#D1FAE5',color:'#065F46',borderRadius:10,fontSize:10,fontWeight:700}}>🟢 Live DB</span>
           </p>
         </div>
-        {tab==='books' && <button onClick={()=>setShowAddBook(true)} style={{padding:'9px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>+ Add Book</button>}
+        {tab==='books' && <button onClick={()=>setShowAddBook(true)} style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}><><i className="ti ti-plus" style={{fontSize:16}}/> Add Book</></button>}
       </div>
 
       {error && <div style={{padding:'12px 16px',background:'#FEF2F2',border:'1px solid #FECACA',borderRadius:10,color:'#DC2626',fontSize:13,marginBottom:16}}>❌ {error}</div>}
@@ -142,7 +142,7 @@ export default function Library() {
 
           {tab==='books' && <>
             <div style={{display:'flex',gap:10,padding:14,borderBottom:'1px solid #F3F4F6',flexWrap:'wrap'}}>
-              <input placeholder="🔍 Search title, author, ISBN…" value={search} onChange={e=>setSearch(e.target.value)} style={{...inp,maxWidth:300,flex:1}}/>
+              <input placeholder="Search title, author, ISBN…" value={search} onChange={e=>setSearch(e.target.value)} style={{...inp,maxWidth:300,flex:1}}/>
               <select value={filterCat} onChange={e=>setFilterCat(e.target.value)} style={{...inp,width:'auto'}}>
                 <option value="">All Categories</option>
                 {categories.map(c=><option key={c}>{c}</option>)}
@@ -154,7 +154,7 @@ export default function Library() {
               {(search||filterCat||filterClass) && <button onClick={()=>{setSearch('');setFilterCat('');setFilterClass('');}} style={{padding:'9px 14px',border:'1px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:12,color:'#6B7280',cursor:'pointer'}}>Clear ✕</button>}
             </div>
             {books.length===0
-              ? <div style={{padding:48,textAlign:'center',color:'#9CA3AF'}}><div style={{fontSize:40,marginBottom:10}}>📚</div><div style={{fontWeight:600,color:'#6B7280'}}>No books yet — click "+ Add Book"</div></div>
+              ? <div style={{padding:48,textAlign:'center',color:'#9CA3AF'}}><div style={{fontSize:40,marginBottom:10}}>📚</div><div style={{fontWeight:600,color:'#6B7280'}}>No books yet — click "<><i className="ti ti-plus" style={{fontSize:16}}/> Add Book</>"</div></div>
               : <table style={{width:'100%',borderCollapse:'collapse',fontSize:12}}>
                   <thead><tr>{['Title','Author','ISBN','Category','Rack','Total','Available','Action'].map(h=><th key={h} style={th}>{h}</th>)}</tr></thead>
                   <tbody>{books.map((b,i)=>(
@@ -208,7 +208,8 @@ export default function Library() {
           <div style={{background:'#fff',borderRadius:18,width:560,maxHeight:'90vh',overflow:'auto'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center',position:'sticky',top:0,background:'#fff'}}>
               <div style={{fontWeight:700,fontSize:15}}>📚 Add New Book</div>
-              <button onClick={()=>setShowAddBook(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>setShowAddBook(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <form onSubmit={handleAddBook} style={{padding:20}}>
               <div style={{marginBottom:12}}><label style={lbl}>Title *</label><input required value={bookForm.title} onChange={e=>setBookForm({...bookForm,title:e.target.value})} placeholder="Book title" style={inp} autoFocus/></div>
@@ -238,7 +239,7 @@ export default function Library() {
               </div>
               <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
                 <button type="button" onClick={()=>setShowAddBook(false)} style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
-                <button type="submit" disabled={saving} style={{padding:'10px 22px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>{saving?'⏳ Saving…':'💾 Add Book'}</button>
+                <button type="submit" disabled={saving} style={{padding:'10px 22px',display:'flex',alignItems:'center',gap:6,background:saving?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer',boxShadow:saving?'none':'0 4px 12px rgba(123,111,212,0.35)'}}>{saving?'Saving…':'💾 Add Book'}</button>
               </div>
             </form>
           </div>
@@ -251,7 +252,8 @@ export default function Library() {
           <div style={{background:'#fff',borderRadius:18,width:460,overflow:'hidden'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
               <div style={{fontWeight:700,fontSize:15}}>📤 Issue Book</div>
-              <button onClick={()=>setShowIssue(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>setShowIssue(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <form onSubmit={handleIssue} style={{padding:20}}>
               <div style={{padding:12,background:'#EDE9F8',borderRadius:10,marginBottom:16}}>
@@ -278,7 +280,7 @@ export default function Library() {
               </div>
               <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
                 <button type="button" onClick={()=>setShowIssue(null)} style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
-                <button type="submit" disabled={saving} style={{padding:'10px 22px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>{saving?'⏳ Saving…':'📤 Issue Book'}</button>
+                <button type="submit" disabled={saving} style={{padding:'10px 22px',display:'flex',alignItems:'center',gap:6,background:saving?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer',boxShadow:saving?'none':'0 4px 12px rgba(123,111,212,0.35)'}}>{saving?'Saving…':'📤 Issue Book'}</button>
               </div>
             </form>
           </div>

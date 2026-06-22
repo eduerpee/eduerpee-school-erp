@@ -514,7 +514,7 @@ td.c{text-align:center;width:28px;}td.r{text-align:right;width:80px;font-weight:
 
       {/* Filters */}
       <div style={{display:'flex',gap:10,marginBottom:16,flexWrap:'wrap'}}>
-        <input placeholder="🔍 Search name, admission no…" value={search} onChange={e=>{setSearch(e.target.value);setPage(1);}} style={{...inp(),maxWidth:300,flex:1}}/>
+        <input placeholder="Search name, admission no…" value={search} onChange={e=>{setSearch(e.target.value);setPage(1);}} style={{...inp(),maxWidth:300,flex:1}}/>
         <select value={filterCls} onChange={e=>{setFilterCls(e.target.value);setPage(1);}} style={{...inp(),width:'auto'}}>
           <option value=''>All Classes</option>{dbClasses.map(c=><option key={c}>{c}</option>)}
         </select>
@@ -592,7 +592,8 @@ td.c{text-align:center;width:28px;}td.r{text-align:right;width:80px;font-weight:
               <div style={{fontWeight:700,fontSize:15}}>👨‍🎓 Student Profile</div>
               <div style={{display:'flex',gap:8}}>
                 <button onClick={()=>{setViewSt(null);openEdit(viewSt);}} style={{padding:'6px 14px',border:'1.5px solid #F59E0B',borderRadius:8,background:'#FEF3C7',color:'#92400E',fontSize:12,fontWeight:700,cursor:'pointer'}}>✏️ Edit</button>
-                <button onClick={()=>setViewSt(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+                <button onClick={()=>setViewSt(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
               </div>
             </div>
             <div style={{padding:22}}>
@@ -657,7 +658,8 @@ td.c{text-align:center;width:28px;}td.r{text-align:right;width:80px;font-weight:
                   <div style={{fontSize:11,color:'#065F46',marginTop:2}}>✅ Changes will sync to linked Registration and Enquiry</div>
                 )}
               </div>
-              <button onClick={()=>{setEditSt(null);setEditErrors({});}} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>{setEditSt(null);setEditErrors({});}} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <div style={{padding:20}}>
 
@@ -911,7 +913,8 @@ td.c{text-align:center;width:28px;}td.r{text-align:right;width:80px;font-weight:
                   {feeStudent.first_name} {feeStudent.last_name||''} &nbsp;·&nbsp; {feeStudent.admission_no} &nbsp;·&nbsp; {feeStudent.class_name||''}
                 </div>
               </div>
-              <button onClick={()=>setFeeStudent(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>setFeeStudent(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
 
             <div style={{padding:20}}>

@@ -109,10 +109,10 @@ export default function Settings() {
   };
 
   const TABS = [
-    ['school',     '🏫 School Profile'],
-    ['appearance', '🎨 Appearance'],
-    ['academic',   '📚 Academic'],
-    ['users',      '👤 User Accounts'],
+    ['school',     'School Profile',   'ti-building'],
+    ['appearance', 'Appearance',       'ti-palette'],
+    ['academic',   'Academic',         'ti-books'],
+    ['users',      'User Accounts',    'ti-users'],
   ];
 
   if (loadingDB) {
@@ -128,23 +128,23 @@ export default function Settings() {
           <p style={{fontSize:12,color:'#6B7280',marginTop:2}}>
             Manage school profile, branding and configuration &nbsp;
             {isLiveDB
-              ? <span style={{padding:'2px 8px',background:'#D1FAE5',color:'#065F46',borderRadius:10,fontSize:10,fontWeight:700}}>🟢 Synced to DB</span>
+              ? <span style={{padding:'2px 8px',background:'#D1FAE5',color:'#065F46',borderRadius:10,fontSize:10,fontWeight:700}}>🟢</span>
               : <span style={{padding:'2px 8px',background:'#FEF3C7',color:'#92400E',borderRadius:10,fontSize:10,fontWeight:700}}>Local only</span>}
           </p>
         </div>
         <button onClick={handleSave} disabled={saving}
-          style={{padding:'9px 22px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:8,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer'}}>
-          {saving ? '⏳ Saving…' : '💾 Save Changes'}
+          style={{display:'flex',alignItems:'center',gap:7,padding:'9px 22px',background:saving?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer',boxShadow:saving?'none':'0 4px 12px rgba(123,111,212,0.4)'}}>
+          <i className="ti ti-device-floppy" style={{fontSize:16}}/>{saving ? 'Saving…' : 'Save Changes'}
         </button>
       </div>
 
       <div style={{display:'flex',gap:20}}>
         {/* Tabs */}
-        <div style={{width:200,flexShrink:0,display:'flex',flexDirection:'column',gap:4}}>
-          {TABS.map(([key,label]) => (
+        <div style={{width:200,flexShrink:0,display:'flex',flexDirection:'column',gap:4,background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:8}}>
+          {TABS.map(([key,label,icon]) => (
             <button key={key} onClick={() => setActiveTab(key)}
-              style={{padding:'10px 14px',border:'none',borderRadius:9,background:activeTab===key?'#1E1B4B':'transparent',color:activeTab===key?'#fff':'#374151',fontSize:13,fontWeight:activeTab===key?700:500,cursor:'pointer',textAlign:'left',transition:'all .15s'}}>
-              {label}
+              style={{display:'flex',alignItems:'center',gap:9,padding:'10px 14px',border:'none',borderRadius:10,background:activeTab===key?'linear-gradient(135deg,#7B6FD4,#534AB7)':'transparent',color:activeTab===key?'#fff':'#374151',fontSize:13,fontWeight:activeTab===key?700:500,cursor:'pointer',textAlign:'left',transition:'all .15s'}}>
+              <i className={'ti '+icon} style={{fontSize:16,flexShrink:0}}/>{label}
             </button>
           ))}
         </div>
@@ -154,7 +154,12 @@ export default function Settings() {
           {/* ── SCHOOL PROFILE TAB ── */}
           {activeTab === 'school' && (
             <div style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:24}}>
-              <h3 style={{fontSize:15,fontWeight:700,marginBottom:20}}>School Profile</h3>
+              <div style={{display:'flex',alignItems:'center',gap:9,marginBottom:20}}>
+                <div style={{width:32,height:32,background:'#EEEDFE',borderRadius:9,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <i className="ti ti-building" style={{fontSize:17,color:'#534AB7'}}/>
+                </div>
+                <h3 style={{fontSize:15,fontWeight:700,margin:0}}>School Profile</h3>
+              </div>
 
               {/* Logo */}
               <div style={{marginBottom:20}}>
@@ -163,12 +168,12 @@ export default function Settings() {
                   <div style={{width:80,height:80,borderRadius:14,border:'2px dashed #E5E7EB',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',background:'#F9FAFB',flexShrink:0}}>
                     {settings.logo
                       ? <img src={settings.logo} alt="Logo" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
-                      : <span style={{fontSize:32}}>🏫</span>}
+                      : <i className="ti ti-building" style={{fontSize:32,color:'#9CA3AF'}}/>}
                   </div>
                   <div>
                     <input type="file" accept="image/*" onChange={handleLogoChange} id="logo-upload" style={{display:'none'}}/>
-                    <label htmlFor="logo-upload" style={{display:'inline-block',padding:'8px 16px',background:'#EDE9F8',color:'#1E1B4B',borderRadius:8,fontSize:12,fontWeight:600,cursor:'pointer',border:'1px solid #C4B5FD'}}>
-                      📁 Upload Logo
+                    <label htmlFor="logo-upload" style={{display:'inline-flex',alignItems:'center',gap:6,padding:'8px 16px',background:'#EEEDFE',color:'#534AB7',borderRadius:9,fontSize:12,fontWeight:600,cursor:'pointer',border:'1px solid #C4B5FD'}}>
+                      <i className="ti ti-upload" style={{fontSize:14}}/> Upload Logo
                     </label>
                     {settings.logo && <button onClick={() => set('logo','')} style={{display:'block',marginTop:6,background:'none',border:'none',color:'#DC2626',fontSize:12,cursor:'pointer'}}>Remove logo</button>}
                     <p style={{fontSize:11,color:'#9CA3AF',marginTop:6}}>PNG, JPG up to 2MB. Will appear in sidebar & header.</p>
@@ -197,10 +202,11 @@ export default function Settings() {
               <div><label style={lbl}>Website</label><input value={settings.website} onChange={e=>set('website',e.target.value)} placeholder="www.yourschool.edu.in" style={inp}/></div>
 
               {/* DB status info */}
-              <div style={{marginTop:20,padding:'10px 14px',background:isLiveDB?'#D1FAE5':'#FEF3C7',borderRadius:10,fontSize:12,color:isLiveDB?'#065F46':'#92400E'}}>
+              <div style={{marginTop:20,padding:'10px 14px',background:isLiveDB?'#D1FAE5':'#FEF3C7',borderRadius:10,fontSize:12,color:isLiveDB?'#065F46':'#92400E',display:'flex',alignItems:'center',gap:8}}>
+                <i className={isLiveDB?'ti ti-circle-check':'ti ti-alert-triangle'} style={{fontSize:15,flexShrink:0}}/>
                 {isLiveDB
-                  ? '✅ Connected to database — Save Changes will update the schools table in PostgreSQL'
-                  : '⚠️ Backend not connected — settings saved to browser storage only. Start backend to sync to DB.'}
+                  ? 'Connected to database — Save Changes will update the schools table in PostgreSQL'
+                  : 'Backend not connected — settings saved to browser storage only. Start backend to sync to DB.'}
               </div>
             </div>
           )}
@@ -208,7 +214,12 @@ export default function Settings() {
           {/* ── APPEARANCE TAB ── */}
           {activeTab === 'appearance' && (
             <div style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:24}}>
-              <h3 style={{fontSize:15,fontWeight:700,marginBottom:20}}>Branding & Appearance</h3>
+              <div style={{display:'flex',alignItems:'center',gap:9,marginBottom:20}}>
+                <div style={{width:32,height:32,background:'#E1F5EE',borderRadius:9,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <i className="ti ti-palette" style={{fontSize:17,color:'#0F6E56'}}/>
+                </div>
+                <h3 style={{fontSize:15,fontWeight:700,margin:0}}>Branding & Appearance</h3>
+              </div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20,marginBottom:24}}>
                 <div>
                   <label style={lbl}>Primary Color (Sidebar)</label>

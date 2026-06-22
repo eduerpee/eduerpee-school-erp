@@ -111,8 +111,8 @@ export default function Transport() {
           </p>
         </div>
         <div style={{display:'flex',gap:10}}>
-          {tab==='routes'   && <button onClick={()=>setShowAddRoute(true)} style={{padding:'9px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>+ Add Route</button>}
-          {tab==='vehicles' && <button onClick={()=>setShowAddVeh(true)}   style={{padding:'9px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>+ Add Vehicle</button>}
+          {tab==='routes'   && <button onClick={()=>setShowAddRoute(true)} style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}><><i className="ti ti-plus" style={{fontSize:16}}/> Add Route</></button>}
+          {tab==='vehicles' && <button onClick={()=>setShowAddVeh(true)}   style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}>+ Add Vehicle</button>}
         </div>
       </div>
 
@@ -137,7 +137,7 @@ export default function Transport() {
         {loading ? <div style={{padding:40,textAlign:'center',color:'#9CA3AF'}}>⏳ Loading from database…</div> : <>
 
           {tab==='routes' && (routes.length===0
-            ? <div style={{padding:48,textAlign:'center',color:'#9CA3AF'}}><div style={{fontSize:40,marginBottom:10}}>🚌</div><div style={{fontWeight:600,color:'#6B7280'}}>No routes yet — click "+ Add Route"</div></div>
+            ? <div style={{padding:48,textAlign:'center',color:'#9CA3AF'}}><div style={{fontSize:40,marginBottom:10}}>🚌</div><div style={{fontWeight:600,color:'#6B7280'}}>No routes yet — click "<><i className="ti ti-plus" style={{fontSize:16}}/> Add Route</>"</div></div>
             : <table style={{width:'100%',borderCollapse:'collapse',fontSize:12}}>
                 <thead><tr>{['Route No','Route Name','From','To','Distance','Monthly Fee','Vehicles','Action'].map(h=><th key={h} style={th}>{h}</th>)}</tr></thead>
                 <tbody>{routes.map((r,i)=>(
@@ -185,7 +185,8 @@ export default function Transport() {
           <div style={{background:'#fff',borderRadius:18,width:520,overflow:'hidden'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
               <div style={{fontWeight:700,fontSize:15}}>🚌 Add Transport Route</div>
-              <button onClick={()=>setShowAddRoute(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>setShowAddRoute(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <form onSubmit={handleAddRoute} style={{padding:20}}>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:12}}>
@@ -202,7 +203,7 @@ export default function Transport() {
               </div>
               <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
                 <button type="button" onClick={()=>setShowAddRoute(false)} style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
-                <button type="submit" disabled={saving} style={{padding:'10px 22px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>{saving?'⏳ Saving…':'💾 Save Route'}</button>
+                <button type="submit" disabled={saving} style={{padding:'10px 22px',display:'flex',alignItems:'center',gap:6,background:saving?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer',boxShadow:saving?'none':'0 4px 12px rgba(123,111,212,0.35)'}}>{saving?'Saving…':'Save Route'}</button>
               </div>
             </form>
           </div>
@@ -215,7 +216,8 @@ export default function Transport() {
           <div style={{background:'#fff',borderRadius:18,width:560,maxHeight:'90vh',overflow:'auto'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center',position:'sticky',top:0,background:'#fff'}}>
               <div style={{fontWeight:700,fontSize:15}}>🚍 Add Vehicle</div>
-              <button onClick={()=>setShowAddVeh(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>setShowAddVeh(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <form onSubmit={handleAddVehicle} style={{padding:20}}>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:12}}>
@@ -252,7 +254,7 @@ export default function Transport() {
               </div>
               <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
                 <button type="button" onClick={()=>setShowAddVeh(false)} style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
-                <button type="submit" disabled={saving} style={{padding:'10px 22px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>{saving?'⏳ Saving…':'💾 Save Vehicle'}</button>
+                <button type="submit" disabled={saving} style={{padding:'10px 22px',display:'flex',alignItems:'center',gap:6,background:saving?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer',boxShadow:saving?'none':'0 4px 12px rgba(123,111,212,0.35)'}}>{saving?'Saving…':'Save Vehicle'}</button>
               </div>
             </form>
           </div>
@@ -265,7 +267,8 @@ export default function Transport() {
           <div style={{background:'#fff',borderRadius:18,width:520,overflow:'hidden'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
               <div style={{fontWeight:700,fontSize:15}}>✏️ Edit Route — {editRoute.route_name}</div>
-              <button onClick={()=>setEditRoute(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>setEditRoute(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <form onSubmit={handleEditRoute} style={{padding:20}}>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:12}}>
@@ -282,7 +285,7 @@ export default function Transport() {
               </div>
               <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
                 <button type="button" onClick={()=>setEditRoute(null)} style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
-                <button type="submit" disabled={saving} style={{padding:'10px 22px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>{saving?'⏳ Saving…':'💾 Update Route'}</button>
+                <button type="submit" disabled={saving} style={{padding:'10px 22px',display:'flex',alignItems:'center',gap:6,background:saving?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer',boxShadow:saving?'none':'0 4px 12px rgba(123,111,212,0.35)'}}>{saving?'Saving…':'💾 Update Route'}</button>
               </div>
             </form>
           </div>
@@ -295,7 +298,8 @@ export default function Transport() {
           <div style={{background:'#fff',borderRadius:18,width:560,maxHeight:'90vh',overflow:'auto'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center',position:'sticky',top:0,background:'#fff'}}>
               <div style={{fontWeight:700,fontSize:15}}>✏️ Edit Vehicle — {editVeh.registration_no}</div>
-              <button onClick={()=>setEditVeh(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>setEditVeh(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <form onSubmit={handleEditVehicle} style={{padding:20}}>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:12}}>
@@ -332,7 +336,7 @@ export default function Transport() {
               </div>
               <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
                 <button type="button" onClick={()=>setEditVeh(null)} style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
-                <button type="submit" disabled={saving} style={{padding:'10px 22px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>{saving?'⏳ Saving…':'💾 Update Vehicle'}</button>
+                <button type="submit" disabled={saving} style={{padding:'10px 22px',display:'flex',alignItems:'center',gap:6,background:saving?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer',boxShadow:saving?'none':'0 4px 12px rgba(123,111,212,0.35)'}}>{saving?'Saving…':'💾 Update Vehicle'}</button>
               </div>
             </form>
           </div>

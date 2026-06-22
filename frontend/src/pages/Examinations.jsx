@@ -26,6 +26,13 @@ const TYPE_COLOR = {
   half_yearly: ['#FEF3C7','#92400E'], annual:      ['#D1FAE5','#065F46'],
   practical:   ['#FEE2E2','#991B1B'],
 };
+const TYPE_GRAD = {
+  unit_test:   'linear-gradient(135deg,#1260A8,#55A8EE)',
+  quarterly:   'linear-gradient(135deg,#7B6FD4,#C4BAF2)',
+  half_yearly: 'linear-gradient(135deg,#C17E10,#F0BF50)',
+  annual:      'linear-gradient(135deg,#064E3B,#047857)',
+  practical:   'linear-gradient(135deg,#991B1B,#EF4444)',
+};
 const GRADE_COLOR = {
   'A+':['#D1FAE5','#065F46'], 'A':['#D1FAE5','#065F46'], 'B+':['#DBEAFE','#1E40AF'],
   'B': ['#DBEAFE','#1E40AF'], 'C':['#FEF3C7','#92400E'], 'D':['#FEF3C7','#92400E'],
@@ -220,14 +227,28 @@ export default function Examinations() {
                    :<span style={{padding:'2px 8px',background:'#D1FAE5',color:'#065F46',borderRadius:10,fontSize:10,fontWeight:700}}>🟢 Live DB</span>}
           </p>
         </div>
-        <button onClick={()=>setShowAdd(true)} style={{padding:'9px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>+ New Exam</button>
+        <button onClick={()=>setShowAdd(true)} style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}>
+          <i className="ti ti-plus" style={{fontSize:16}}/> New Exam
+        </button>
       </div>
 
-      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:16}}>
-        {[['Total',exams.length,'#EDE9F8','#1E1B4B'],['Upcoming',exams.filter(e=>getStatus(e)==='Upcoming').length,'#DBEAFE','#1E40AF'],['Completed',exams.filter(e=>getStatus(e)==='Completed').length,'#D1FAE5','#065F46']].map(([l,v,bg,c])=>(
-          <div key={l} style={{padding:'14px',background:bg,borderRadius:12,textAlign:'center'}}>
-            <div style={{fontSize:24,fontWeight:800,color:c,lineHeight:1}}>{v}</div>
-            <div style={{fontSize:11,color:c,marginTop:4,fontWeight:600}}>{l}</div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:14,marginBottom:18}}>
+        {[
+          {l:'Total Exams',   v:exams.length,                                        icon:'ti-clipboard-list', grad:'linear-gradient(135deg,#7B6FD4,#C4BAF2)', c:'#534AB7'},
+          {l:'Upcoming',      v:exams.filter(e=>getStatus(e)==='Upcoming').length,    icon:'ti-calendar-event', grad:'linear-gradient(135deg,#1260A8,#55A8EE)', c:'#185FA5'},
+          {l:'Completed',     v:exams.filter(e=>getStatus(e)==='Completed').length,   icon:'ti-circle-check',   grad:'linear-gradient(135deg,#0E7A5F,#4DCBA6)', c:'#0F6E56'},
+        ].map(s=>(
+          <div key={s.l} style={{borderRadius:16,overflow:'hidden',boxShadow:'0 2px 14px rgba(0,0,0,0.08)',background:'#fff'}}>
+            <div style={{height:4,background:s.grad}}/>
+            <div style={{padding:'12px 14px',display:'flex',alignItems:'center',gap:12}}>
+              <div style={{width:44,height:44,borderRadius:11,background:s.grad,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                <i className={'ti '+s.icon} style={{fontSize:22,color:'white'}}/>
+              </div>
+              <div>
+                <div style={{fontSize:22,fontWeight:700,color:s.c,lineHeight:1}}>{s.v}</div>
+                <div style={{fontSize:11,color:'#6B7280',marginTop:2}}>{s.l}</div>
+              </div>
+            </div>
           </div>
         ))}
       </div>
@@ -238,20 +259,34 @@ export default function Examinations() {
           const [bg,c]=TYPE_COLOR[exam.exam_type]||['#F3F4F6','#374151'];
           const status=getStatus(exam); const [sBg,sC]=statusStyle[status];
           return (
-            <div key={exam.id} style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:18,transition:'all .15s'}}
-              onMouseEnter={e=>{e.currentTarget.style.boxShadow='0 4px 20px rgba(0,0,0,.1)';e.currentTarget.style.borderColor='#C4B5FD';}}
-              onMouseLeave={e=>{e.currentTarget.style.boxShadow='';e.currentTarget.style.borderColor='#E5E7EB';}}>
-              <div style={{display:'flex',justifyContent:'space-between',marginBottom:10}}>
-                <span style={{padding:'3px 10px',borderRadius:20,fontSize:10,fontWeight:700,background:bg,color:c}}>{EXAM_TYPES.find(t=>t.value===exam.exam_type)?.label||exam.exam_type}</span>
-                <span style={{padding:'3px 10px',borderRadius:20,fontSize:10,fontWeight:700,background:sBg,color:sC}}>{status}</span>
+            <div key={exam.id} style={{borderRadius:16,overflow:'hidden',boxShadow:'0 2px 14px rgba(0,0,0,0.08)',background:'#fff',cursor:'pointer',transition:'all .2s'}}
+              onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-3px)';e.currentTarget.style.boxShadow='0 10px 28px rgba(0,0,0,0.13)';}}
+              onMouseLeave={e=>{e.currentTarget.style.transform='';e.currentTarget.style.boxShadow='0 2px 14px rgba(0,0,0,0.08)';}}>
+              <div style={{background:TYPE_GRAD[exam.exam_type]||'linear-gradient(135deg,#7B6FD4,#C4BAF2)',height:72,display:'flex',alignItems:'center',justifyContent:'center',position:'relative'}}>
+                <i className="ti ti-writing" style={{fontSize:36,color:'white',opacity:0.88}}/>
+                <span style={{position:'absolute',top:9,left:12,background:'rgba(255,255,255,0.2)',color:'white',padding:'2px 9px',borderRadius:20,fontSize:10,fontWeight:700}}>{EXAM_TYPES.find(t=>t.value===exam.exam_type)?.label||exam.exam_type}</span>
+                <span style={{position:'absolute',top:9,right:10,background:sBg,color:sC,padding:'2px 9px',borderRadius:20,fontSize:10,fontWeight:700}}>{status}</span>
               </div>
-              <div style={{fontSize:14,fontWeight:700,color:'#111827',marginBottom:8}}>{exam.name}</div>
-              <div style={{fontSize:11,color:'#6B7280',marginBottom:12}}>📅 {exam.start_date||'—'} → 🏁 {exam.end_date||'—'}</div>
-              <button onClick={()=>openExam(exam)} style={{width:'100%',padding:'7px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:8,fontSize:12,fontWeight:700,cursor:'pointer'}}>📋 Schedule & Marks →</button>
+              <div style={{padding:'12px 14px'}}>
+                <div style={{fontSize:14,fontWeight:700,color:'#111827',marginBottom:6}}>{exam.name}</div>
+                <div style={{fontSize:11,color:'#9CA3AF',marginBottom:12,display:'flex',alignItems:'center',gap:5}}>
+                  <i className="ti ti-calendar" style={{fontSize:12}}/>{exam.start_date||'—'}
+                  <i className="ti ti-flag" style={{fontSize:12,marginLeft:4}}/>{exam.end_date||'—'}
+                </div>
+                <button onClick={()=>openExam(exam)} style={{width:'100%',padding:'8px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:9,fontSize:12,fontWeight:700,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:6,boxShadow:'0 3px 8px rgba(123,111,212,0.35)'}}>
+                  <i className="ti ti-calendar-stats" style={{fontSize:14}}/> Schedule & Marks →
+                </button>
+              </div>
             </div>
           );
         })}
-        {!loading&&exams.length===0&&<div style={{gridColumn:'1/-1',padding:48,textAlign:'center',color:'#9CA3AF',background:'#fff',borderRadius:14,border:'0.5px solid #E5E7EB'}}><div style={{fontSize:40,marginBottom:10}}>📝</div>No exams yet</div>}
+        {!loading&&exams.length===0&&<div style={{gridColumn:'1/-1',padding:48,textAlign:'center',background:'#fff',borderRadius:16,border:'1.5px dashed #D1D5DB'}}>
+            <div style={{width:52,height:52,background:'#EEEDFE',borderRadius:14,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 12px'}}>
+              <i className="ti ti-writing" style={{fontSize:26,color:'#534AB7'}}/>
+            </div>
+            <div style={{fontWeight:700,fontSize:14,color:'#534AB7',marginBottom:4}}>No exams yet</div>
+            <div style={{fontSize:12,color:'#9CA3AF'}}>Click "+ New Exam" to create your first exam</div>
+          </div>}
       </div>
 
       {/* Exam detail modal */}
@@ -261,17 +296,22 @@ export default function Examinations() {
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center',position:'sticky',top:0,background:'#fff',zIndex:1}}>
               <div>
                 <div style={{fontWeight:700,fontSize:15}}>{selExam.name}</div>
-                <div style={{fontSize:11,color:'#6B7280',marginTop:2}}>📅 {selExam.start_date||'—'} → 🏁 {selExam.end_date||'—'}</div>
+                <div style={{fontSize:11,color:'#6B7280',marginTop:2,display:'flex',alignItems:'center',gap:5}}>
+                  <i className="ti ti-calendar" style={{fontSize:12}}/>{selExam.start_date||'—'}
+                  <i className="ti ti-flag" style={{fontSize:12,marginLeft:4}}/>{selExam.end_date||'—'}
+                </div>
               </div>
-              <button onClick={()=>setSelExam(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>setSelExam(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/>
+              </button>
             </div>
 
             {/* Tabs */}
             <div style={{display:'flex',borderBottom:'1px solid #E5E7EB',padding:'0 20px',flexShrink:0}}>
-              {[['schedule','📅 Schedule'],['marks','✏️ Enter Marks'],['results','📊 Results']].map(([key,label])=>(
+              {[['schedule','ti-calendar-time','Schedule'],['marks','ti-pencil','Enter Marks'],['results','ti-chart-bar','Results']].map(([key,icon,label])=>(
                 <button key={key} onClick={()=>{setActiveTab(key);if(key==='results')loadResults(selExam.id,resultsClass);}}
-                  style={{padding:'10px 16px',border:'none',borderBottom:activeTab===key?'2px solid #1E1B4B':'2px solid transparent',background:'transparent',color:activeTab===key?'#1E1B4B':'#6B7280',fontSize:13,fontWeight:activeTab===key?700:500,cursor:'pointer',marginBottom:-1}}>
-                  {label}
+                  style={{display:'flex',alignItems:'center',gap:6,padding:'10px 16px',border:'none',borderBottom:activeTab===key?'2px solid #7B6FD4':'2px solid transparent',background:'transparent',color:activeTab===key?'#534AB7':'#6B7280',fontSize:13,fontWeight:activeTab===key?700:500,cursor:'pointer',marginBottom:-1}}>
+                  <i className={'ti '+icon} style={{fontSize:15}}/>{label}
                 </button>
               ))}
             </div>

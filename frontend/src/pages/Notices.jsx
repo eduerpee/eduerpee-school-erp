@@ -184,8 +184,8 @@ export default function Notices() {
           </p>
         </div>
         <button onClick={()=>{setEditNotice(null);setForm({title:'',content:'',type:'general',expiryDate:''});setShowAdd(true);}}
-          style={{padding:'9px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>
-          📢 Post Notice
+          style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}>
+          <i className="ti ti-bell-plus" style={{fontSize:16}}/> Post Notice
         </button>
       </div>
 
@@ -193,10 +193,16 @@ export default function Notices() {
 
       {/* Filter */}
       <div style={{display:'flex',gap:8,marginBottom:16,flexWrap:'wrap'}}>
-        {['', ...TYPES].map(t=>(
-          <button key={t||'all'} onClick={()=>setFilterType(t)}
-            style={{padding:'6px 14px',borderRadius:20,border:'1.5px solid '+(filterType===t?'#1E1B4B':'#E5E7EB'),background:filterType===t?'#1E1B4B':'#fff',color:filterType===t?'#fff':'#374151',fontSize:12,fontWeight:600,cursor:'pointer',textTransform:'capitalize'}}>
-            {t||'All'}
+        {[{k:'',l:'All',icon:'ti-layout-grid'},
+          {k:'general',l:'General',icon:'ti-info-circle'},
+          {k:'circular',l:'Circular',icon:'ti-refresh-dot'},
+          {k:'event',l:'Event',icon:'ti-calendar-event'},
+          {k:'holiday',l:'Holiday',icon:'ti-beach'},
+          {k:'urgent',l:'Urgent',icon:'ti-alert-triangle'},
+        ].map(({k,l,icon})=>(
+          <button key={k||'all'} onClick={()=>setFilterType(k)}
+            style={{display:'flex',alignItems:'center',gap:5,padding:'6px 14px',borderRadius:20,border:'none',background:filterType===k?'linear-gradient(135deg,#7B6FD4,#534AB7)':'#fff',color:filterType===k?'#fff':'#374151',fontSize:12,fontWeight:600,cursor:'pointer',boxShadow:filterType===k?'0 3px 8px rgba(123,111,212,0.35)':'0 1px 3px rgba(0,0,0,0.06)',outline:filterType!==k?'1px solid #E5E7EB':'none',textTransform:'capitalize'}}>
+            <i className={'ti '+icon} style={{fontSize:13}}/>{l}
           </button>
         ))}
       </div>
@@ -205,45 +211,50 @@ export default function Notices() {
       {loading
         ? <div style={{padding:48,textAlign:'center',color:'#9CA3AF'}}>⏳ Loading…</div>
         : notices.length === 0
-          ? <div style={{padding:64,textAlign:'center',background:'#F9FAFB',borderRadius:14,border:'2px dashed #E5E7EB'}}>
-              <div style={{fontSize:48,marginBottom:12}}>📢</div>
-              <div style={{fontWeight:700,color:'#374151',fontSize:15}}>No notices yet</div>
+          ? <div style={{padding:64,textAlign:'center',background:'linear-gradient(135deg,#EEEDFE,#F5F3FF)',borderRadius:16,border:'1.5px dashed #C4B5FD'}}>
+              <div style={{width:56,height:56,background:'#7B6FD4',borderRadius:14,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 14px'}}>
+                <i className="ti ti-bell" style={{fontSize:28,color:'white'}}/>
+              </div>
+              <div style={{fontWeight:700,color:'#534AB7',fontSize:15,marginBottom:4}}>No notices yet</div>
+              <div style={{fontSize:12,color:'#9CA3AF'}}>Click "Post Notice" to publish your first notice</div>
             </div>
           : <div style={{display:'flex',flexDirection:'column',gap:12}}>
               {notices.map(n => {
                 const [bg, color] = TYPE_COLORS[n.notice_type] || TYPE_COLORS.general;
                 return (
-                  <div key={n.id} style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:'14px 18px'}}>
-                    <div style={{display:'flex',gap:12,alignItems:'flex-start'}}>
-                      <span style={{padding:'4px 10px',background:bg,color,borderRadius:20,fontSize:10,fontWeight:800,textTransform:'uppercase',flexShrink:0,marginTop:2}}>
+                  <div key={n.id} style={{background:'#fff',borderRadius:16,overflow:'hidden',boxShadow:'0 2px 12px rgba(0,0,0,0.07)',border:'0.5px solid #E5E7EB',transition:'all .18s'}}
+                    onMouseEnter={e=>{e.currentTarget.style.boxShadow='0 8px 24px rgba(0,0,0,0.11)';e.currentTarget.style.transform='translateY(-2px)';}}
+                    onMouseLeave={e=>{e.currentTarget.style.boxShadow='0 2px 12px rgba(0,0,0,0.07)';e.currentTarget.style.transform='';}}>
+                    <div style={{height:4,background:n.notice_type==='urgent'?'linear-gradient(90deg,#991B1B,#EF4444)':n.notice_type==='holiday'?'linear-gradient(90deg,#0E7A5F,#4DCBA6)':n.notice_type==='event'?'linear-gradient(90deg,#7B6FD4,#C4BAF2)':n.notice_type==='circular'?'linear-gradient(90deg,#1260A8,#55A8EE)':'linear-gradient(90deg,#6B7280,#9CA3AF)'}}/>
+                    <div style={{padding:'14px 18px',display:'flex',gap:12,alignItems:'flex-start'}}>
+                      <span style={{padding:'4px 12px',background:bg,color,borderRadius:20,fontSize:10,fontWeight:800,textTransform:'uppercase',flexShrink:0,marginTop:2,letterSpacing:'0.5px'}}>
                         {n.notice_type}
                       </span>
-                      <div style={{flex:1}}>
-                        <div style={{fontWeight:700,fontSize:14,color:'#111827',marginBottom:4}}>{n.title}</div>
-                        <div style={{fontSize:12,color:'#6B7280',lineHeight:1.6,marginBottom:6,whiteSpace:'pre-line'}}>{n.content}</div>
-                        <div style={{fontSize:11,color:'#9CA3AF',display:'flex',gap:16,flexWrap:'wrap'}}>
-                          <span>📅 {new Date(n.publish_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
-                          {n.posted_by_name && <span>👤 {n.posted_by_name}</span>}
-                          {n.expiry_date && <span>⏰ Expires: {new Date(n.expiry_date).toLocaleDateString('en-IN')}</span>}
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontWeight:700,fontSize:14,color:'#111827',marginBottom:5}}>{n.title}</div>
+                        <div style={{fontSize:12,color:'#6B7280',lineHeight:1.6,marginBottom:8,whiteSpace:'pre-line'}}>{n.content}</div>
+                        <div style={{fontSize:11,color:'#9CA3AF',display:'flex',gap:14,flexWrap:'wrap',alignItems:'center'}}>
+                          <span style={{display:'flex',alignItems:'center',gap:4}}><i className="ti ti-calendar" style={{fontSize:12}}/>{new Date(n.publish_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
+                          {n.posted_by_name && <span style={{display:'flex',alignItems:'center',gap:4}}><i className="ti ti-user" style={{fontSize:12}}/>{n.posted_by_name}</span>}
+                          {n.expiry_date && <span style={{display:'flex',alignItems:'center',gap:4}}><i className="ti ti-clock" style={{fontSize:12}}/>Expires: {new Date(n.expiry_date).toLocaleDateString('en-IN')}</span>}
                         </div>
                       </div>
-                      {/* Actions */}
                       <div style={{display:'flex',gap:6,flexShrink:0}}>
                         <button onClick={()=>printNotice(n)}
-                          style={{padding:'5px 11px',border:'1px solid #E5E7EB',borderRadius:7,background:'#EDE9F8',color:'#1E1B4B',fontSize:11,fontWeight:600,cursor:'pointer'}}>
-                          🖨️ Print
+                          style={{display:'flex',alignItems:'center',gap:5,padding:'5px 11px',border:'1px solid #E5E7EB',borderRadius:8,background:'#EEEDFE',color:'#534AB7',fontSize:11,fontWeight:600,cursor:'pointer'}}>
+                          <i className="ti ti-printer" style={{fontSize:13}}/> Print
                         </button>
                         <button onClick={()=>setShowWA(n)}
-                          style={{padding:'5px 11px',border:'1px solid #E5E7EB',borderRadius:7,background:'#D1FAE5',color:'#065F46',fontSize:11,fontWeight:600,cursor:'pointer'}}>
-                          💬 WhatsApp
+                          style={{display:'flex',alignItems:'center',gap:5,padding:'5px 11px',border:'1px solid #E5E7EB',borderRadius:8,background:'#D1FAE5',color:'#065F46',fontSize:11,fontWeight:600,cursor:'pointer'}}>
+                          <i className="ti ti-brand-whatsapp" style={{fontSize:13}}/> WhatsApp
                         </button>
                         <button onClick={()=>openEdit(n)}
-                          style={{padding:'5px 11px',border:'1px solid #E5E7EB',borderRadius:7,background:'#FEF3C7',color:'#92400E',fontSize:11,fontWeight:600,cursor:'pointer'}}>
-                          ✏️ Edit
+                          style={{display:'flex',alignItems:'center',gap:5,padding:'5px 11px',border:'1px solid #FEF3C7',borderRadius:8,background:'#FEF3C7',color:'#92400E',fontSize:11,fontWeight:600,cursor:'pointer'}}>
+                          <i className="ti ti-edit" style={{fontSize:13}}/> Edit
                         </button>
                         <button onClick={()=>handleDelete(n.id)}
-                          style={{padding:'5px 11px',border:'1px solid #FEE2E2',borderRadius:7,background:'#FFF5F5',color:'#DC2626',fontSize:11,fontWeight:600,cursor:'pointer'}}>
-                          🗑
+                          style={{display:'flex',alignItems:'center',justifyContent:'center',padding:'5px 10px',border:'1px solid #FEE2E2',borderRadius:8,background:'#FFF5F5',color:'#DC2626',fontSize:11,cursor:'pointer'}}>
+                          <i className="ti ti-trash" style={{fontSize:13}}/>
                         </button>
                       </div>
                     </div>
@@ -257,9 +268,10 @@ export default function Notices() {
       {showAdd && (
         <div style={{position:'fixed',inset:0,background:'rgba(15,23,42,.45)',zIndex:500,display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
           <div style={{background:'#fff',borderRadius:18,width:580,maxHeight:'90vh',overflow:'auto'}}>
-            <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center',position:'sticky',top:0,background:'#fff'}}>
+            <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center',position:'sticky',top:0,background:'#fff',zIndex:1}}>
               <div style={{fontWeight:700,fontSize:15}}>{editNotice?'✏️ Edit Notice':'📢 Post Notice'}</div>
-              <button onClick={()=>{setShowAdd(false);setEditNotice(null);}} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>{setShowAdd(false);setEditNotice(null);}} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <form onSubmit={handleSave} style={{padding:20}}>
               <div style={{marginBottom:12}}>

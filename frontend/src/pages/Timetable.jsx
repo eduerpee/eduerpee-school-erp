@@ -182,9 +182,11 @@ export default function Timetable() {
             const text = DAYS.map((day,di)=>day+'\n'+Array.from({length:PERIODS},(_,p)=>{const c=grid[cellKey(di,p+1)];return (p+1)+'. '+(c?.subject||'—')+(c?.teacher?' ('+c.teacher+')':'');}).join('\n')).join('\n\n');
             const b=new Blob([selClass?.name+' Timetable\n\n'+text],{type:'text/plain'});
             const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Timetable_'+selClass?.name+'.txt';a.click();
-          }} style={{padding:'9px 14px',border:'1.5px solid #1E1B4B',borderRadius:9,background:'#EDE9F8',color:'#1E1B4B',fontSize:12,fontWeight:700,cursor:'pointer'}}>📥 Export</button>
-          {filledCount>0 && <button onClick={handleBulkSave} disabled={saving} style={{padding:'9px 20px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>
-            {saving?'⏳ Saving…':'💾 Save All to DB'}
+          }} style={{display:'flex',alignItems:'center',gap:6,padding:'9px 14px',border:'1.5px solid #7B6FD4',borderRadius:10,background:'#EEEDFE',color:'#534AB7',fontSize:12,fontWeight:700,cursor:'pointer'}}>
+            <i className="ti ti-download" style={{fontSize:15}}/> Export
+          </button>
+          {filledCount>0 && <button onClick={handleBulkSave} disabled={saving} style={{display:'flex',alignItems:'center',gap:6,padding:'9px 20px',background:saving?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:10,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer',boxShadow:saving?'none':'0 4px 12px rgba(123,111,212,0.4)'}}>
+            <i className="ti ti-device-floppy" style={{fontSize:15}}/>{saving?'Saving…':'Save All to DB'}
           </button>}
         </div>
       </div>
@@ -194,7 +196,7 @@ export default function Timetable() {
         <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
           {classes.map(cls=>(
             <button key={cls.id} onClick={()=>{setSelClass(cls);setGrid({});}}
-              style={{padding:'7px 14px',border:'1.5px solid '+(selClass?.id===cls.id?'#1E1B4B':'#E5E7EB'),borderRadius:9,background:selClass?.id===cls.id?'#1E1B4B':'#fff',color:selClass?.id===cls.id?'#fff':'#374151',fontSize:12,fontWeight:selClass?.id===cls.id?700:500,cursor:'pointer'}}>
+              style={{padding:'7px 14px',border:'none',borderRadius:10,background:selClass?.id===cls.id?'linear-gradient(135deg,#7B6FD4,#534AB7)':'#fff',color:selClass?.id===cls.id?'#fff':'#374151',fontSize:12,fontWeight:selClass?.id===cls.id?700:500,cursor:'pointer',boxShadow:selClass?.id===cls.id?'0 3px 8px rgba(123,111,212,0.35)':'0 1px 3px rgba(0,0,0,0.06)',outline:selClass?.id!==cls.id?'1px solid #E5E7EB':'none'}}>
               {cls.name}
             </button>
           ))}
@@ -202,7 +204,7 @@ export default function Timetable() {
         <div style={{display:'flex',gap:6}}>
           {['A','B','C','D'].map(s=>(
             <button key={s} onClick={()=>setSelSection(s)}
-              style={{width:34,height:34,border:'1.5px solid '+(selSection===s?'#7C3AED':'#E5E7EB'),borderRadius:8,background:selSection===s?'#EDE9F8':'#fff',color:selSection===s?'#5B21B6':'#374151',fontSize:13,fontWeight:700,cursor:'pointer'}}>
+              style={{width:36,height:36,border:'none',borderRadius:9,background:selSection===s?'linear-gradient(135deg,#7B6FD4,#534AB7)':'#fff',color:selSection===s?'#fff':'#374151',fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:selSection===s?'0 3px 8px rgba(123,111,212,0.35)':'0 1px 3px rgba(0,0,0,0.06)',outline:selSection!==s?'1px solid #E5E7EB':'none'}}>
               {s}
             </button>
           ))}
@@ -217,7 +219,7 @@ export default function Timetable() {
             <tr style={{background:'#F9FAFB'}}>
               <th style={{padding:'12px 14px',textAlign:'left',fontSize:11,fontWeight:700,color:'#6B7280',textTransform:'uppercase',borderBottom:'1px solid #E5E7EB',width:110}}>Period / Day</th>
               {DAYS.map(d=>(
-                <th key={d} style={{padding:'12px 14px',textAlign:'center',fontSize:12,fontWeight:700,color:'#1E1B4B',borderBottom:'1px solid #E5E7EB',borderLeft:'0.5px solid #F3F4F6'}}>{d}</th>
+                <th key={d} style={{padding:'12px 14px',textAlign:'center',fontSize:12,fontWeight:700,color:'#534AB7',borderBottom:'1px solid #E5E7EB',borderLeft:'0.5px solid #F3F4F6'}}>{d}</th>
               ))}
             </tr>
           </thead>
@@ -225,7 +227,7 @@ export default function Timetable() {
             {Array.from({length:PERIODS},(_,p)=>(
               <tr key={p} style={{borderBottom:'0.5px solid #F3F4F6'}}>
                 <td style={{padding:'8px 12px',background:'#F9FAFB',borderRight:'1px solid #E5E7EB'}}>
-                  <div style={{fontSize:11,fontWeight:700,color:'#1E1B4B'}}>Period {p+1}</div>
+                  <div style={{fontSize:11,fontWeight:700,color:'#534AB7'}}>Period {p+1}</div>
                   <div style={{fontSize:10,color:'#9CA3AF'}}>{HOURS[p]}–{HOURS[p+1]||'—'}</div>
                 </td>
                 {DAYS.map((day,di)=>{
@@ -240,13 +242,17 @@ export default function Timetable() {
                       {cell?.subject ? (
                         <div style={{background:clr,borderRadius:8,padding:'6px 8px',position:'relative',minHeight:52}}>
                           <div style={{fontSize:12,fontWeight:700,color:'#1E1B4B',lineHeight:1.3}}>{cell.subject}</div>
-                          {cell.teacher && <div style={{fontSize:10,color:'#6B7280',marginTop:2}}>👤 {cell.teacher}</div>}
-                          {cell.startTime && <div style={{fontSize:9,color:'#9CA3AF',marginTop:2}}>🕐 {cell.startTime}</div>}
+                          {cell.teacher && <div style={{fontSize:10,color:'#6B7280',marginTop:2,display:'flex',alignItems:'center',gap:3}}><i className="ti ti-user" style={{fontSize:11}}/>{cell.teacher}</div>}
+                          {cell.startTime && <div style={{fontSize:9,color:'#9CA3AF',marginTop:2,display:'flex',alignItems:'center',gap:3}}><i className="ti ti-clock" style={{fontSize:10}}/>{cell.startTime}</div>}
                           <button onClick={(e)=>clearSlot(di,p+1,e)}
-                            style={{position:'absolute',top:3,right:3,background:'rgba(255,255,255,.7)',border:'none',borderRadius:4,width:16,height:16,fontSize:10,cursor:'pointer',color:'#DC2626'}}>✕</button>
+                            style={{position:'absolute',top:3,right:3,background:'rgba(255,255,255,.8)',border:'none',borderRadius:5,width:18,height:18,fontSize:10,cursor:'pointer',color:'#DC2626',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                              <i className="ti ti-x" style={{fontSize:11}}/>
+                            </button>
                         </div>
                       ) : (
-                        <div style={{height:52,display:'flex',alignItems:'center',justifyContent:'center',border:'1.5px dashed #E5E7EB',borderRadius:8,color:'#D1D5DB',fontSize:18}}>+</div>
+                        <div style={{height:52,display:'flex',alignItems:'center',justifyContent:'center',border:'1.5px dashed #E5E7EB',borderRadius:8,color:'#C4B5FD'}}>
+                          <i className="ti ti-plus" style={{fontSize:18}}/>
+                        </div>
                       )}
                     </td>
                   );
@@ -257,10 +263,10 @@ export default function Timetable() {
         </table>
       </div>
 
-      <div style={{marginTop:12,padding:'10px 14px',background:'#EDE9F8',borderRadius:10,fontSize:11,color:'#1E1B4B',display:'flex',gap:20,flexWrap:'wrap'}}>
-        <span>🖱️ Click any cell to assign a subject</span>
-        <span>✕ Click X on a cell to clear it</span>
-        <span>💾 Save All to DB persists everything</span>
+      <div style={{marginTop:12,padding:'10px 16px',background:'linear-gradient(135deg,#EEEDFE,#F5F3FF)',borderRadius:10,border:'1px solid #C4B5FD',fontSize:11,color:'#534AB7',display:'flex',gap:20,flexWrap:'wrap',alignItems:'center'}}>
+        <span style={{display:'flex',alignItems:'center',gap:5}}><i className="ti ti-hand-click" style={{fontSize:13}}/> Click any cell to assign a subject</span>
+        <span style={{display:'flex',alignItems:'center',gap:5}}><i className="ti ti-x" style={{fontSize:13}}/> Click X on a cell to clear it</span>
+        <span style={{display:'flex',alignItems:'center',gap:5}}><i className="ti ti-device-floppy" style={{fontSize:13}}/> Save All to DB persists everything</span>
       </div>
 
       {/* Edit modal */}
@@ -268,8 +274,15 @@ export default function Timetable() {
         <div style={{position:'fixed',inset:0,background:'rgba(15,23,42,.45)',zIndex:500,display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
           <div style={{background:'#fff',borderRadius:18,width:440,overflow:'hidden'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-              <div style={{fontWeight:700,fontSize:15}}>📅 {DAYS[showEdit.day]} · Period {showEdit.period}</div>
-              <button onClick={()=>setShowEdit(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <div style={{fontWeight:700,fontSize:15,display:'flex',alignItems:'center',gap:8}}>
+                <div style={{width:28,height:28,background:'#EEEDFE',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <i className="ti ti-calendar-time" style={{fontSize:15,color:'#534AB7'}}/>
+                </div>
+                {DAYS[showEdit.day]} · Period {showEdit.period}
+              </div>
+              <button onClick={()=>setShowEdit(null)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/>
+              </button>
             </div>
             <div style={{padding:20}}>
               <div style={{marginBottom:12}}>
@@ -309,8 +322,8 @@ export default function Timetable() {
                   </div>
                 )}
                 {editForm.teacherId && (
-                  <div style={{marginTop:6,padding:'6px 10px',background:'#D1FAE5',borderRadius:7,fontSize:11,color:'#065F46',fontWeight:600}}>
-                    ✅ {editForm.teacher} selected
+                  <div style={{marginTop:6,padding:'6px 10px',background:'#D1FAE5',borderRadius:7,fontSize:11,color:'#065F46',fontWeight:600,display:'flex',alignItems:'center',gap:5}}>
+                    <i className="ti ti-circle-check" style={{fontSize:13}}/>{editForm.teacher} selected
                   </div>
                 )}
               </div>
@@ -319,10 +332,10 @@ export default function Timetable() {
                 <div><label style={lbl}>End Time</label><input type="time" value={editForm.endTime} onChange={e=>setEditForm({...editForm,endTime:e.target.value})} style={inp}/></div>
               </div>
               <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
-                <button onClick={()=>setShowEdit(null)} style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
+                <button onClick={()=>setShowEdit(null)} style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer',color:'#6B7280',fontWeight:600}}>Cancel</button>
                 <button onClick={handleSave} disabled={saving||!editForm.subject}
-                  style={{padding:'10px 22px',background:saving||!editForm.subject?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:saving||!editForm.subject?'not-allowed':'pointer'}}>
-                  {saving?'⏳ Saving…':'💾 Save Slot'}
+                  style={{display:'flex',alignItems:'center',gap:6,padding:'10px 22px',background:saving||!editForm.subject?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:saving||!editForm.subject?'not-allowed':'pointer',boxShadow:saving||!editForm.subject?'none':'0 4px 12px rgba(123,111,212,0.35)'}}>
+                  <i className="ti ti-device-floppy" style={{fontSize:15}}/>{saving?'Saving…':'Save Slot'}
                 </button>
               </div>
             </div>

@@ -699,12 +699,12 @@ export default function IDCard() {
         </div>
         <div style={{display:'flex',gap:10}}>
           {previewStu && <button onClick={()=>printCards([previewStu],design,selTheme,school)}
-            style={{padding:'10px 18px',border:'1.5px solid #1E1B4B',background:'#fff',color:'#1E1B4B',borderRadius:10,fontSize:13,fontWeight:600,cursor:'pointer'}}>
-            🖨️ Preview Print
+            style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',border:'1.5px solid #7B6FD4',background:'#fff',color:'#534AB7',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer'}}>
+            <i className="ti ti-printer" style={{fontSize:16}}/> Preview Print
           </button>}
           {selected.size>0 && <button onClick={()=>printCards(selStudents,design,selTheme,school)}
-            style={{padding:'10px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:10,fontSize:13,fontWeight:700,cursor:'pointer'}}>
-            🖨️ Print {selected.size} Card{selected.size>1?'s':''}
+            style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}>
+            <i className="ti ti-printer" style={{fontSize:16}}/> Print {selected.size} Card{selected.size>1?'s':''}
           </button>}
         </div>
       </div>
@@ -714,14 +714,19 @@ export default function IDCard() {
         <div style={{display:'flex',flexDirection:'column',gap:12}}>
           {/* Design */}
           <div style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:14}}>
-            <div style={{fontWeight:700,fontSize:13,marginBottom:10,color:'#111827'}}>Card Design</div>
+            <div style={{fontWeight:700,fontSize:13,marginBottom:12,color:'#111827',display:'flex',alignItems:'center',gap:8}}>
+              <div style={{width:28,height:28,background:'#EEEDFE',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <i className="ti ti-id-badge" style={{fontSize:15,color:'#534AB7'}}/>
+              </div>
+              Card Design
+            </div>
             {[{label:'Horizontal',o:'H'},{label:'Vertical',o:'V'}].map(({label,o})=>(
               <div key={o} style={{marginBottom:8}}>
                 <div style={{fontSize:10,fontWeight:700,color:'#9CA3AF',textTransform:'uppercase',marginBottom:5}}>{label}</div>
                 <div style={{display:'flex',gap:5}}>
                   {DESIGNS.filter(d=>d.orientation===o).map(d=>(
                     <button key={d.id} onClick={()=>setSelDesign(d.id)}
-                      style={{flex:1,padding:'7px 4px',border:'1.5px solid '+(selDesign===d.id?'#1E1B4B':'#E5E7EB'),borderRadius:8,background:selDesign===d.id?'#EDE9F8':'#fff',fontSize:9.5,fontWeight:selDesign===d.id?700:400,cursor:'pointer',color:selDesign===d.id?'#1E1B4B':'#374151'}}>
+                      style={{flex:1,padding:'8px 4px',border:'1.5px solid '+(selDesign===d.id?'#7B6FD4':'#E5E7EB'),borderRadius:9,background:selDesign===d.id?'#EEEDFE':'#fff',fontSize:9.5,fontWeight:selDesign===d.id?700:400,cursor:'pointer',color:selDesign===d.id?'#534AB7':'#374151'}}>
                       {d.label}
                     </button>
                   ))}
@@ -731,28 +736,45 @@ export default function IDCard() {
           </div>
           {/* Theme */}
           <div style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:14}}>
-            <div style={{fontWeight:700,fontSize:13,marginBottom:10,color:'#111827'}}>Color Theme</div>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6}}>
+            <div style={{fontWeight:700,fontSize:13,marginBottom:12,color:'#111827',display:'flex',alignItems:'center',gap:8}}>
+              <div style={{width:28,height:28,background:'#E1F5EE',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <i className="ti ti-palette" style={{fontSize:15,color:'#0F6E56'}}/>
+              </div>
+              Color Theme
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:7}}>
               {Object.entries(THEMES).map(([key,t])=>(
                 <button key={key} onClick={()=>setSelTheme(key)}
-                  style={{padding:'8px',border:'2px solid '+(selTheme===key?t.p1:'#E5E7EB'),borderRadius:9,background:selTheme===key?t.bg:'#fff',cursor:'pointer',display:'flex',alignItems:'center',gap:8}}>
-                  <div style={{width:16,height:16,borderRadius:4,background:t.p1,flexShrink:0}}/>
-                  <span style={{fontSize:10,fontWeight:700,color:selTheme===key?t.p1:'#374151'}}>{t.name}</span>
+                  style={{padding:'9px',border:'2px solid '+(selTheme===key?t.p1:'#E5E7EB'),borderRadius:10,background:selTheme===key?t.bg:'#fff',cursor:'pointer',display:'flex',alignItems:'center',gap:8}}>
+                  <div style={{width:20,height:20,borderRadius:5,background:`linear-gradient(135deg,${t.p1},${t.p2})`,flexShrink:0}}/>
+                  <span style={{fontSize:11,fontWeight:selTheme===key?700:600,color:selTheme===key?t.p1:'#374151'}}>{t.name}</span>
                 </button>
               ))}
             </div>
           </div>
           {/* Students */}
           <div style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:14}}>
-            <div style={{fontWeight:700,fontSize:13,marginBottom:10,color:'#111827'}}>Students</div>
-            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search..." style={{...inpStyle,width:'100%',marginBottom:8}}/>
+            <div style={{fontWeight:700,fontSize:13,marginBottom:12,color:'#111827',display:'flex',alignItems:'center',gap:8}}>
+              <div style={{width:28,height:28,background:'#DBEAFE',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <i className="ti ti-users" style={{fontSize:15,color:'#1E40AF'}}/>
+              </div>
+              Students
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:8,background:'#F9FAFB',border:'1px solid #E5E7EB',borderRadius:9,padding:'7px 12px',marginBottom:8}}>
+              <i className="ti ti-search" style={{fontSize:15,color:'#9CA3AF'}}/>
+              <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search..." style={{border:'none',outline:'none',fontSize:12,background:'transparent',width:'100%',fontFamily:'inherit'}}/>
+            </div>
             <select value={filterClass} onChange={e=>setFilterClass(e.target.value)} style={{...inpStyle,width:'100%',marginBottom:8}}>
               <option value="">All Classes</option>
               {classes.map(c=><option key={c.id} value={c.name}>{c.name}</option>)}
             </select>
             <div style={{display:'flex',gap:6,marginBottom:8}}>
-              <button onClick={()=>setSelected(new Set(students.map(s=>s.id)))} style={{flex:1,padding:'6px',border:'1px solid #E5E7EB',borderRadius:7,background:'#F9FAFB',fontSize:11,cursor:'pointer',fontWeight:600}}>All</button>
-              <button onClick={()=>setSelected(new Set())} style={{flex:1,padding:'6px',border:'1px solid #E5E7EB',borderRadius:7,background:'#F9FAFB',fontSize:11,cursor:'pointer',fontWeight:600}}>Clear</button>
+              <button onClick={()=>setSelected(new Set(students.map(s=>s.id)))} style={{flex:1,padding:'6px',border:'1px solid #7B6FD4',borderRadius:8,background:'#EEEDFE',fontSize:11,cursor:'pointer',fontWeight:700,color:'#534AB7',display:'flex',alignItems:'center',justifyContent:'center',gap:4}}>
+                <i className="ti ti-checks" style={{fontSize:13}}/>All
+              </button>
+              <button onClick={()=>setSelected(new Set())} style={{flex:1,padding:'6px',border:'1px solid #E5E7EB',borderRadius:8,background:'#F9FAFB',fontSize:11,cursor:'pointer',fontWeight:600,color:'#6B7280',display:'flex',alignItems:'center',justifyContent:'center',gap:4}}>
+                <i className="ti ti-x" style={{fontSize:13}}/>Clear
+              </button>
             </div>
             <div style={{maxHeight:240,overflowY:'auto',border:'1px solid #F3F4F6',borderRadius:8}}>
               {loading ? <div style={{padding:16,textAlign:'center',color:'#9CA3AF',fontSize:12}}>Loading...</div>
@@ -778,17 +800,17 @@ export default function IDCard() {
           <div style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:20}}>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
               <div>
-                <div style={{fontWeight:700,fontSize:13,color:'#111827'}}>{design.label} — {design.sub}</div>
+                <div style={{fontWeight:700,fontSize:14,color:'#111827'}}>{design.label} — {design.sub}</div>
                 <div style={{fontSize:11,color:'#9CA3AF',marginTop:2}}>{design.orientation==='H'?'Landscape 85×54mm':'Portrait 54×86mm'} · Front & Back</div>
               </div>
               {/* Front/Back toggle */}
-              <div style={{display:'flex',border:'1.5px solid #E5E7EB',borderRadius:8,overflow:'hidden'}}>
+              <div style={{display:'flex',border:'1.5px solid #E5E7EB',borderRadius:10,overflow:'hidden'}}>
                 <button onClick={()=>setShowBack(false)}
-                  style={{padding:'6px 14px',border:'none',background:!showBack?'#1E1B4B':'#fff',color:!showBack?'#fff':'#374151',fontSize:12,fontWeight:600,cursor:'pointer'}}>
+                  style={{padding:'7px 18px',border:'none',background:!showBack?'linear-gradient(135deg,#7B6FD4,#534AB7)':'#fff',color:!showBack?'#fff':'#374151',fontSize:12,fontWeight:700,cursor:'pointer'}}>
                   Front
                 </button>
                 <button onClick={()=>setShowBack(true)}
-                  style={{padding:'6px 14px',border:'none',background:showBack?'#1E1B4B':'#fff',color:showBack?'#fff':'#374151',fontSize:12,fontWeight:600,cursor:'pointer'}}>
+                  style={{padding:'7px 18px',border:'none',background:showBack?'linear-gradient(135deg,#7B6FD4,#534AB7)':'#fff',color:showBack?'#fff':'#374151',fontSize:12,fontWeight:700,cursor:'pointer'}}>
                   Back
                 </button>
               </div>
@@ -808,7 +830,12 @@ export default function IDCard() {
           {/* Selected mini thumbnails */}
           {selected.size > 0 && (
             <div style={{background:'#fff',border:'0.5px solid #E5E7EB',borderRadius:14,padding:14,marginTop:12}}>
-              <div style={{fontWeight:700,fontSize:13,marginBottom:10,color:'#111827'}}>Selected ({selected.size}) · Front Preview</div>
+              <div style={{fontWeight:700,fontSize:13,marginBottom:10,color:'#111827',display:'flex',alignItems:'center',gap:8}}>
+                <div style={{width:28,height:28,background:'#EEEDFE',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <i className="ti ti-stack" style={{fontSize:15,color:'#534AB7'}}/>
+                </div>
+                Selected ({selected.size}) · Front Preview
+              </div>
               <div style={{display:'flex',gap:8,flexWrap:'wrap',overflow:'hidden'}}>
                 {selStudents.slice(0,6).map(s=>{
                   const sc = design.orientation==='V' ? 0.33 : 0.35;

@@ -104,7 +104,7 @@ export default function Expenses() {
             <span style={{padding:'2px 8px',background:'#D1FAE5',color:'#065F46',borderRadius:10,fontSize:10,fontWeight:700}}>🟢 Live DB</span>
           </p>
         </div>
-        <button onClick={()=>setShowAdd(true)} style={{padding:'9px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>+ Add Expense</button>
+        <button onClick={()=>setShowAdd(true)} style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}><><i className="ti ti-plus" style={{fontSize:16}}/> Add Expense</></button>
       </div>
 
       {error && <div style={{padding:'12px 16px',background:'#FEF2F2',border:'1px solid #FECACA',borderRadius:10,color:'#DC2626',fontSize:13,marginBottom:16}}>❌ {error}</div>}
@@ -222,7 +222,8 @@ export default function Expenses() {
           <div style={{background:'#fff',borderRadius:18,width:580,maxHeight:'90vh',overflow:'auto'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center',position:'sticky',top:0,background:'#fff'}}>
               <div style={{fontWeight:700,fontSize:15}}>💰 Add Expense</div>
-              <button onClick={()=>setShowAdd(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>setShowAdd(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <form onSubmit={handleAdd} style={{padding:20}}>
               <div style={{marginBottom:12}}><label style={lbl}>Title *</label><input required value={form.title} onChange={e=>setForm({...form,title:e.target.value})} placeholder="e.g. Electricity Bill June" style={inp} autoFocus/></div>
@@ -255,7 +256,7 @@ export default function Expenses() {
               </div>
               <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
                 <button type="button" onClick={()=>setShowAdd(false)} style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
-                <button type="submit" disabled={saving} style={{padding:'10px 22px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>{saving?'⏳ Saving…':'💾 Save Expense'}</button>
+                <button type="submit" disabled={saving} style={{padding:'10px 22px',display:'flex',alignItems:'center',gap:6,background:saving?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer',boxShadow:saving?'none':'0 4px 12px rgba(123,111,212,0.35)'}}>{saving?'Saving…':'Save Expense'}</button>
               </div>
             </form>
           </div>
@@ -268,7 +269,8 @@ export default function Expenses() {
           <div style={{background:'#fff',borderRadius:18,width:400,overflow:'hidden'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
               <div style={{fontWeight:700,fontSize:15}}>+ Add Category</div>
-              <button onClick={()=>setShowAddCat(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <button onClick={()=>setShowAddCat(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/></button>
             </div>
             <div style={{padding:20}}>
               <div style={{marginBottom:14}}>
@@ -281,7 +283,7 @@ export default function Expenses() {
               </div>
               <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
                 <button onClick={()=>setShowAddCat(false)} style={{padding:'9px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
-                <button onClick={handleAddCategory} disabled={!newCat.trim()} style={{padding:'9px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>+ Add</button>
+                <button onClick={handleAddCategory} disabled={!newCat.trim()} style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}>+ Add</button>
               </div>
             </div>
           </div>

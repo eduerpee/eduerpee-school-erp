@@ -76,8 +76,8 @@ export default function Employees() {
           </p>
         </div>
         <button onClick={()=>setShowAdd(true)}
-          style={{padding:'10px 20px',background:'#1E1B4B',color:'#fff',border:'none',borderRadius:10,fontSize:13,fontWeight:700,cursor:'pointer'}}>
-          + Add Employee
+          style={{display:'flex',alignItems:'center',gap:7,padding:'9px 18px',background:'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:11,fontSize:13,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 12px rgba(123,111,212,0.4)'}}>
+          <i className="ti ti-plus" style={{fontSize:16}}/> Add Employee
         </button>
       </div>
 
@@ -92,23 +92,33 @@ export default function Employees() {
       {/* Stats */}
       <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:20}}>
         {[
-          { label:'Total',          value: employees.length, bg:'#F5F3FF', color:'#4C1D95' },
-          { label:'Teaching',       value: byType('teaching'),       bg:'#EDE9F8', color:'#5B21B6' },
-          { label:'Non Teaching',   value: byType('non_teaching'),   bg:'#D1FAE5', color:'#065F46' },
-          { label:'Administrative', value: byType('administrative'), bg:'#DBEAFE', color:'#1E40AF' },
+          { label:'Total Staff',    value:employees.length,          icon:'ti-users',      grad:'linear-gradient(135deg,#7B6FD4,#C4BAF2)', color:'#534AB7' },
+          { label:'Teaching',       value:byType('teaching'),        icon:'ti-school',     grad:'linear-gradient(135deg,#0E7A5F,#4DCBA6)', color:'#0F6E56' },
+          { label:'Non Teaching',   value:byType('non_teaching'),    icon:'ti-tool',       grad:'linear-gradient(135deg,#C17E10,#F0BF50)', color:'#BA7517' },
+          { label:'Administrative', value:byType('administrative'),  icon:'ti-briefcase',  grad:'linear-gradient(135deg,#1260A8,#55A8EE)', color:'#185FA5' },
         ].map(s => (
-          <div key={s.label} style={{background:s.bg,borderRadius:12,padding:'14px 18px',textAlign:'center'}}>
-            <div style={{fontSize:26,fontWeight:800,color:s.color}}>{loading?'…':s.value}</div>
-            <div style={{fontSize:12,color:'#6B7280',marginTop:2}}>{s.label}</div>
+          <div key={s.label} style={{borderRadius:16,overflow:'hidden',boxShadow:'0 2px 14px rgba(0,0,0,0.08)',background:'#fff'}}>
+            <div style={{height:4,background:s.grad}}/>
+            <div style={{padding:'12px 14px',display:'flex',alignItems:'center',gap:12}}>
+              <div style={{width:44,height:44,borderRadius:11,background:s.grad,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                <i className={'ti '+s.icon} style={{fontSize:22,color:'white'}}/>
+              </div>
+              <div>
+                <div style={{fontSize:20,fontWeight:700,color:s.color,lineHeight:1}}>{loading?'…':s.value}</div>
+                <div style={{fontSize:11,color:'#6B7280',marginTop:2}}>{s.label}</div>
+              </div>
+            </div>
           </div>
         ))}
       </div>
 
       {/* Search */}
       <div style={{marginBottom:14}}>
-        <input value={search} onChange={e=>setSearch(e.target.value)}
-          placeholder="🔍 Search name, employee ID..."
-          style={{...inp, width:280, display:'inline-block'}}/>
+        <div style={{display:'flex',alignItems:'center',gap:8,background:'#fff',border:'1px solid #E5E7EB',borderRadius:10,padding:'8px 14px',width:280}}>
+          <i className="ti ti-search" style={{fontSize:16,color:'#9CA3AF'}}/>
+          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search name, employee ID..."
+            style={{border:'none',outline:'none',fontSize:13,background:'transparent',width:'100%',fontFamily:'inherit'}}/>
+        </div>
       </div>
 
       {/* Table */}
@@ -127,7 +137,9 @@ export default function Employees() {
             )}
             {!loading && !error && employees.length === 0 && (
               <tr><td colSpan={9} style={{padding:48,textAlign:'center',color:'#9CA3AF'}}>
-                <div style={{fontSize:36,marginBottom:8}}>👥</div>No employees yet. Click "+ Add Employee" to add one.
+                <div style={{width:48,height:48,background:'#EEEDFE',borderRadius:12,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 10px'}}>
+                  <i className="ti ti-users" style={{fontSize:24,color:'#534AB7'}}/>
+                </div>No employees yet. Click "+ Add Employee" to add one.
               </td></tr>
             )}
             {!loading && employees.map(e => {
@@ -165,8 +177,8 @@ export default function Employees() {
                     </span>
                   </td>
                   <td style={{padding:'10px 14px'}}>
-                    <button style={{padding:'5px 14px',border:'1px solid #E5E7EB',borderRadius:7,background:'#fff',fontSize:12,cursor:'pointer',fontWeight:600}}>
-                      View
+                    <button style={{display:'flex',alignItems:'center',gap:5,padding:'5px 12px',border:'1px solid #7B6FD4',borderRadius:8,background:'#EEEDFE',fontSize:12,cursor:'pointer',fontWeight:600,color:'#534AB7'}}>
+                      <i className="ti ti-eye" style={{fontSize:13}}/>View
                     </button>
                   </td>
                 </tr>
@@ -186,8 +198,15 @@ export default function Employees() {
         <div style={{position:'fixed',inset:0,background:'rgba(15,23,42,.45)',zIndex:500,display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
           <div style={{background:'#fff',borderRadius:18,width:560,maxHeight:'90vh',overflow:'auto'}}>
             <div style={{padding:'16px 20px',borderBottom:'0.5px solid #E5E7EB',display:'flex',justifyContent:'space-between',alignItems:'center',position:'sticky',top:0,background:'#fff',zIndex:1}}>
-              <div style={{fontWeight:700,fontSize:15}}>👤 Add New Employee</div>
-              <button onClick={()=>setShowAdd(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',fontSize:16}}>✕</button>
+              <div style={{fontWeight:700,fontSize:15,display:'flex',alignItems:'center',gap:8}}>
+                <div style={{width:28,height:28,background:'#EEEDFE',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <i className="ti ti-user-plus" style={{fontSize:15,color:'#534AB7'}}/>
+                </div>
+                Add New Employee
+              </div>
+              <button onClick={()=>setShowAdd(false)} style={{background:'#F3F4F6',border:'none',borderRadius:8,width:32,height:32,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <i className="ti ti-x" style={{fontSize:16,color:'#6B7280'}}/>
+              </button>
             </div>
             <form onSubmit={handleAdd} style={{padding:20}}>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:12}}>
@@ -238,8 +257,8 @@ export default function Employees() {
                 <button type="button" onClick={()=>setShowAdd(false)}
                   style={{padding:'10px 16px',border:'1.5px solid #E5E7EB',borderRadius:9,background:'#fff',fontSize:13,cursor:'pointer'}}>Cancel</button>
                 <button type="submit" disabled={saving}
-                  style={{padding:'10px 22px',background:saving?'#9CA3AF':'#1E1B4B',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:'pointer'}}>
-                  {saving?'⏳ Saving…':'💾 Save Employee'}
+                  style={{display:'flex',alignItems:'center',gap:6,padding:'10px 22px',background:saving?'#9CA3AF':'linear-gradient(135deg,#7B6FD4,#534AB7)',color:'#fff',border:'none',borderRadius:9,fontSize:13,fontWeight:700,cursor:saving?'not-allowed':'pointer',boxShadow:saving?'none':'0 4px 12px rgba(123,111,212,0.35)'}}>
+                  <i className="ti ti-device-floppy" style={{fontSize:15}}/>{saving?'Saving…':'Save Employee'}
                 </button>
               </div>
             </form>
