@@ -13,7 +13,8 @@ const roomAPI = {
 };
 
 const ROOM_TYPES = ['classroom','lab','library','office','hall','sports'];
-const TYPE_ICONS = { classroom:'🏫', lab:'🔬', library:'📚', office:'🏢', hall:'🎭', sports:'⚽' };
+const TYPE_ICONS  = { classroom:'ti-school', lab:'ti-microscope', library:'ti-books', office:'ti-building-skyscraper', hall:'ti-confetti', sports:'ti-ball-football' };
+const TYPE_GRADS  = { classroom:'linear-gradient(135deg,#7B6FD4,#C4BAF2)', lab:'linear-gradient(135deg,#1260A8,#55A8EE)', library:'linear-gradient(135deg,#0E7A5F,#4DCBA6)', office:'linear-gradient(135deg,#C17E10,#F0BF50)', hall:'linear-gradient(135deg,#9C2D50,#E87FA0)', sports:'linear-gradient(135deg,#0E7A5F,#4DCBA6)' };
 const TYPE_COLORS = { classroom:['#EDE9F8','#4C1D95'], lab:['#DBEAFE','#1E40AF'], library:['#D1FAE5','#065F46'], office:['#FEF3C7','#92400E'], hall:['#FCE7F3','#9D174D'], sports:['#D1FAE5','#065F46'] };
 
 const inp = { width:'100%', padding:'10px 12px', border:'1.5px solid #E5E7EB', borderRadius:9, fontSize:13, outline:'none', fontFamily:'inherit', background:'#fff', boxSizing:'border-box' };
@@ -328,7 +329,7 @@ export default function RoomAllocation() {
                   {ROOM_TYPES.map(t=>(
                     <button type="button" key={t} onClick={()=>setForm({...form,roomType:t})}
                       style={{padding:'8px 4px',border:'1.5px solid '+(form.roomType===t?'#1E1B4B':'#E5E7EB'),borderRadius:8,background:form.roomType===t?'#EDE9F8':'#fff',cursor:'pointer',fontSize:12,fontWeight:form.roomType===t?700:400,textTransform:'capitalize'}}>
-                      {TYPE_ICONS[t]} {t}
+                      <i className={'ti '+TYPE_ICONS[t]} style={{fontSize:13,color:filterType===t?'white':undefined}}/> {t}
                     </button>
                   ))}
                 </div>
